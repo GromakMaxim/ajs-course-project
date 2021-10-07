@@ -19,6 +19,7 @@ export function calcTileType(index, boardSize) {
 }
 
 export function definePositionedTeams(teamPlayer, teamEnemy, boardSize) {
+  boardSize *= boardSize;
   const possiblePlayerPositions = definePlayerPossiblePositions(boardSize);
   const rndPositionsPlayer = selectRndPositionFromArray(possiblePlayerPositions, teamPlayer.length);
 
