@@ -17,6 +17,8 @@ export function calcTileType(index, boardSize) {
 }
 
 export function defineRndPosition(teamPlayer, teamEnemy, boardSize) {
+  const possiblePlayerPositions = definePlayerPossiblePositions(boardSize);
+  const possibleEnemyPositions = defineEnemyPossiblePositions(boardSize);
 
   if (whoseTeam === 'player') {
 
@@ -26,7 +28,17 @@ export function defineRndPosition(teamPlayer, teamEnemy, boardSize) {
   }
 }
 
-export function teamPlayerPossiblePositions(boardSize) {
+export function selectRndPositionFromArray(positions, posTotalNumber) {
+  const set = new Set();
+  while (true) {
+    const random = positions[Math.floor(Math.random() * positions.length)];
+    if (!set.has(random)) set.add(random);
+    if (set.size === posTotalNumber) break;
+  }
+  return Array.from(set);
+}
+
+export function definePlayerPossiblePositions(boardSize) {
   let temp = 0;
   const arr = [];
   while (true) {
@@ -39,7 +51,7 @@ export function teamPlayerPossiblePositions(boardSize) {
   return arr;
 }
 
-export function teamEnemyPossiblePositions(boardSize) {
+export function defineEnemyPossiblePositions(boardSize) {
   let temp = 6;
   const arr = [];
   while (true) {
