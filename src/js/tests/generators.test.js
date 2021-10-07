@@ -7,11 +7,15 @@ test('expect randomly created character', () => {
   const testCase = [Swordsman, Bowman, Magician];
   const actual = characterGenerator(testCase, 5);
 
-  expect(actual).not.toBe(null);
+  expect(actual)
+    .not
+    .toBe(null);
 });
 
 test('expect error', () => {
   const testCase = [];
-  const actual = characterGenerator(testCase, 5);
-  expect(actual).toThrow(Error);
+  expect(() => {
+    characterGenerator(testCase, 5);
+  })
+    .toThrow(Error);
 });

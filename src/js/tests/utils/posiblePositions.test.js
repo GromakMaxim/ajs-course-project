@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/named
-import { teamEnemyPossiblePositions, teamPlayerPossiblePositions } from '../../utils';
+import { defineEnemyPossiblePositions, definePlayerPossiblePositions } from '../../utils';
 
 test('expect array with 2 left lines for field with 64cells', () => {
-  const actual = teamPlayerPossiblePositions(64);
+  const actual = definePlayerPossiblePositions(64);
   const expected = [
     0, 1,
     8, 9,
@@ -18,7 +18,7 @@ test('expect array with 2 left lines for field with 64cells', () => {
 });
 
 test('expect array with 2 right lines for field with 64cells', () => {
-  const actual = teamEnemyPossiblePositions(64);
+  const actual = defineEnemyPossiblePositions(64);
   const expected = [
     6, 7,
     14, 15,
