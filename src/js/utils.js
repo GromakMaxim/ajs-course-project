@@ -1,3 +1,5 @@
+import PositionedCharacter from './PositionedCharacter';
+
 export function calcTileType(index, boardSize) {
   // eslint-disable-next-line no-restricted-properties
   const lastCell = Math.pow(boardSize, 2) - 1;
@@ -16,16 +18,28 @@ export function calcTileType(index, boardSize) {
   return 'center';
 }
 
-export function defineRndPosition(teamPlayer, teamEnemy, boardSize) {
+export function definePositionedTeams(teamPlayer, teamEnemy, boardSize) {
   const possiblePlayerPositions = definePlayerPossiblePositions(boardSize);
+  const rndPositionsPlayer = selectRndPositionFromArray(possiblePlayerPositions, teamPlayer.length);
+
   const possibleEnemyPositions = defineEnemyPossiblePositions(boardSize);
+  const rndPositionsEnemy = selectRndPositionFromArray(possibleEnemyPositions, teamEnemy.length);
 
-  if (whoseTeam === 'player') {
+  const positionedTeamA = definePositionedCharacter(teamPlayer, rndPositionsPlayer);
+  const positionedTeamB = definePositionedCharacter(teamEnemy, rndPositionsEnemy);
 
+  return positionedTeamA.concat(positionedTeamB);
+}
+
+export function definePositionedCharacter(team, positions) {
+  // its okay, when team <= positions number. but the reverse situation is impossible
+  if (team.size > positions.size) throw new Error('the size of the team is not equal to the number of available positions');
+  const arr = [];
+
+  for (let i = 0; i < team.length; i++) {
+    arr.push(new PositionedCharacter(team[i], positions[i]));
   }
-  if (whoseTeam === 'enemy') {
-
-  }
+  return arr;
 }
 
 export function selectRndPositionFromArray(positions, posTotalNumber) {

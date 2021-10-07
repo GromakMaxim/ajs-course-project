@@ -2,7 +2,7 @@
 import {
   defineEnemyPossiblePositions,
   definePlayerPossiblePositions,
-  selectRndPositionFromArray
+  selectRndPositionFromArray,
 } from '../../utils';
 
 test('expect array with 2 left lines for field with 64cells', () => {

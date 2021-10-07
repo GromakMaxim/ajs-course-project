@@ -19,6 +19,7 @@
         "guard-for-in":"off",
         "import/extensions":"off",
         "no-param-reassign":"off",
-        "class-methods-use-this":"off"
+        "class-methods-use-this":"off",
+        "no-use-before-define":"off"
     }
 }
