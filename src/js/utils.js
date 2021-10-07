@@ -16,6 +16,42 @@ export function calcTileType(index, boardSize) {
   return 'center';
 }
 
+export function defineRndPosition(teamPlayer, teamEnemy, boardSize) {
+
+  if (whoseTeam === 'player') {
+
+  }
+  if (whoseTeam === 'enemy') {
+
+  }
+}
+
+export function teamPlayerPossiblePositions(boardSize) {
+  let temp = 0;
+  const arr = [];
+  while (true) {
+    arr.push(temp);
+    temp++;
+    arr.push(temp);
+    temp += 7;
+    if (temp >= boardSize) break;
+  }
+  return arr;
+}
+
+export function teamEnemyPossiblePositions(boardSize) {
+  let temp = 6;
+  const arr = [];
+  while (true) {
+    arr.push(temp);
+    temp++;
+    arr.push(temp);
+    temp += 7;
+    if (temp >= boardSize) break;
+  }
+  return arr;
+}
+
 export function calcHealthLevel(health) {
   if (health < 15) {
     return 'critical';
