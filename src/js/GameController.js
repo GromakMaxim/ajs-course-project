@@ -41,6 +41,8 @@ export default class GameController {
       this.gamePlay.allPositionedCharacters
         .filter((item) => item.character.type === 'swordsman' || item.character.type === 'bowman' || item.character.type === 'magician')
         .forEach((item) => this.gamePlay.deselectCell(item.position));
+      // eslint-disable-next-line prefer-destructuring
+      this.gamePlay.selectedCharacter = found[0];
       this.gamePlay.selectCell(index);
       this.gamePlay.showCellTooltip(found[0].character.type, index);
     }
@@ -49,13 +51,22 @@ export default class GameController {
   onCellEnter(index) {
     const charactersPositions = this.gamePlay.allPositionedCharacters
       .map((item) => item.position);
+
     if (charactersPositions.includes(index)) this.gamePlay.setCursor('pointer');
+
+    if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
+      this.gamePlay.selectCell(index, 'green');
+    }
   }
 
   onCellLeave(index) {
     const charactersPositions = this.gamePlay.allPositionedCharacters
       .map((item) => item.position);
     if (charactersPositions.includes(index)) this.gamePlay.setCursor('default');
+
+    if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
+      this.gamePlay.deselectCell(index);
+    }
   }
 
   turn(turn) {
