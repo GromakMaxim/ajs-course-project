@@ -1,5 +1,5 @@
 import themes from './themes.js';
-import { generateTeam} from './generators';
+import { generateTeam } from './generators';
 import Swordsman from './characters/Swordsman';
 import Bowman from './characters/Bowman';
 import Vampire from './characters/Vampire';
@@ -22,8 +22,8 @@ export default class GameController {
     this.turn('player');
 
     // eslint-disable-next-line max-len
-    this.gamePlay.positionedPlayersTeam = definePositionedTeams(playerTeam, enemyTeam, this.gamePlay.boardSize);
-    this.gamePlay.redrawPositions(this.gamePlay.positionedPlayersTeam);
+    this.gamePlay.allPositionedCharacters = definePositionedTeams(playerTeam, enemyTeam, this.gamePlay.boardSize);
+    this.gamePlay.redrawPositions(this.gamePlay.allPositionedCharacters);
     this.gamePlay.addCellLeaveListener((index) => this.onCellLeave(index));
     this.gamePlay.addCellEnterListener((index) => this.onCellEnter(index));
     this.gamePlay.addCellClickListener((index) => this.onCellClick(index));
@@ -33,7 +33,16 @@ export default class GameController {
   }
 
   onCellClick(index) {
-    // TODO: react to click
+    const found = this.gamePlay.allPositionedCharacters
+      .filter((item) => item.character.type === 'swordsman' || item.character.type === 'bowman' || item.character.type === 'magician')
+      .filter((item) => item.position === index);
+
+    if (found.length !== 0) {
+      this.gamePlay.allPositionedCharacters
+        .filter((item) => item.character.type === 'swordsman' || item.character.type === 'bowman' || item.character.type === 'magician')
+        .forEach((item) => this.gamePlay.deselectCell(item.position));
+      this.gamePlay.selectCell(index);
+    }
   }
 
   onCellEnter(index) {
