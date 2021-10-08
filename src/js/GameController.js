@@ -42,6 +42,7 @@ export default class GameController {
         .filter((item) => item.character.type === 'swordsman' || item.character.type === 'bowman' || item.character.type === 'magician')
         .forEach((item) => this.gamePlay.deselectCell(item.position));
       this.gamePlay.selectCell(index);
+      this.gamePlay.showCellTooltip(found[0].character.type, index);
     }
   }
 
