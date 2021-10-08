@@ -1,8 +1,7 @@
 import PositionedCharacter from './PositionedCharacter';
 
 export function calcTileType(index, boardSize) {
-  // eslint-disable-next-line no-restricted-properties
-  const lastCell = Math.pow(boardSize, 2) - 1;
+  const lastCell = boardSize * boardSize - 1;
 
   // corner
   if (index === 0) return 'top-left';
@@ -89,4 +88,50 @@ export function calcHealthLevel(health) {
   }
 
   return 'high';
+}
+
+export function defineMovementArea(positionedCharacter, boardSize) {
+  const arr = [];
+
+  const currentPosition = positionedCharacter.position;
+  const steps = positionedCharacter.character.movementDistance;
+  const lineLength = Math.sqrt(boardSize);
+
+  // go down
+  let candidate = 0;
+  for (let step = 1; step <= steps; step++) {
+    candidate = currentPosition - (step * lineLength);
+    if (candidate > 0) {
+      let left = candidate - steps;
+      const right = candidate + steps;
+      while (left <= right) {
+        arr.push(left);
+        left++;
+      }
+    }
+  }
+
+  // center line
+  let left = currentPosition - steps;
+  let right = currentPosition + steps;
+  while (left <= right) {
+    arr.push(left);
+    left++;
+  }
+
+  // go up
+  candidate = 0;
+  for (let step = 1; step <= steps; step++) {
+    candidate = currentPosition + (step * lineLength);
+    if (candidate >= 0 && candidate <= boardSize) {
+      left = candidate - steps;
+      right = candidate + steps;
+      while (left <= right) {
+        arr.push(left);
+        left++;
+      }
+    }
+  }
+  arr.sort((a, b) => a - b);
+  return arr;
 }

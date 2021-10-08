@@ -7,7 +7,7 @@ import Magician from './characters/Magician';
 import Undead from './characters/Undead';
 import Daemon from './characters/Daemon';
 import GameState from './GameState';
-import { definePositionedTeams } from './utils';
+import { defineMovementArea, definePositionedTeams } from './utils';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -55,6 +55,7 @@ export default class GameController {
     if (charactersPositions.includes(index)) this.gamePlay.setCursor('pointer');
 
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
+      defineMovementArea(this.gamePlay.selectedCharacter);
       this.gamePlay.selectCell(index, 'green');
     }
   }
