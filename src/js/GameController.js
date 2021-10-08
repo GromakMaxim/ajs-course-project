@@ -46,11 +46,15 @@ export default class GameController {
   }
 
   onCellEnter(index) {
-    // TODO: react to mouse enter
+    const charactersPositions = this.gamePlay.allPositionedCharacters
+      .map((item) => item.position);
+    if (charactersPositions.includes(index)) this.gamePlay.setCursor('pointer');
   }
 
   onCellLeave(index) {
-    // TODO: react to mouse leave
+    const charactersPositions = this.gamePlay.allPositionedCharacters
+      .map((item) => item.position);
+    if (charactersPositions.includes(index)) this.gamePlay.setCursor('default');
   }
 
   turn(turn) {
