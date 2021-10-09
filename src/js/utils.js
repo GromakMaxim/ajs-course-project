@@ -135,3 +135,15 @@ export function defineMovementArea(positionedCharacter, boardSize) {
   arr.sort((a, b) => a - b);
   return arr;
 }
+
+export function findFirstAndLastCellOfLine(currentPosition, boardSize) {
+  const lineLength = Math.sqrt(boardSize);
+  if (currentPosition < lineLength) return [0, lineLength - 1];
+  let i = currentPosition;
+  while (true) {
+    if (i % Math.sqrt(boardSize) === 0) {
+      return [i, i + lineLength - 1];
+    }
+    i--;
+  }
+}
