@@ -8,6 +8,7 @@ import Undead from './characters/Undead';
 import Daemon from './characters/Daemon';
 import GameState from './GameState';
 import { defineMovementArea, definePositionedTeams } from './utils';
+import cursors from './cursors';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -52,18 +53,20 @@ export default class GameController {
     const charactersPositions = this.gamePlay.allPositionedCharacters
       .map((item) => item.position);
 
-    if (charactersPositions.includes(index)) this.gamePlay.setCursor('pointer');
+    if (charactersPositions.includes(index)) this.gamePlay.setCursor(cursors.pointer);
 
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
-      defineMovementArea(this.gamePlay.selectedCharacter);
-      this.gamePlay.selectCell(index, 'green');
+      const area = defineMovementArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2);
+      if (area.includes(index)) {
+        this.gamePlay.selectCell(index, 'green');
+      }
     }
   }
 
   onCellLeave(index) {
     const charactersPositions = this.gamePlay.allPositionedCharacters
       .map((item) => item.position);
-    if (charactersPositions.includes(index)) this.gamePlay.setCursor('default');
+    if (charactersPositions.includes(index)) this.gamePlay.setCursor(cursors.auto);
 
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
       this.gamePlay.deselectCell(index);

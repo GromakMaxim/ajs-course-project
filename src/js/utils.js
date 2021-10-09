@@ -96,14 +96,26 @@ export function defineMovementArea(positionedCharacter, boardSize) {
   const currentPosition = positionedCharacter.position;
   const steps = positionedCharacter.character.movementDistance;
   const lineLength = Math.sqrt(boardSize);
+  let lineBorders;
+  let left;
+  let right;
 
   // go down
   let candidate = 0;
   for (let step = 1; step <= steps; step++) {
     candidate = currentPosition - (step * lineLength);
     if (candidate > 0) {
-      let left = candidate - steps;
-      const right = candidate + steps;
+      lineBorders = findFirstAndLastCellOfLine(candidate, boardSize);
+      left = lineBorders[0];
+      right = lineBorders[1];
+
+      if (candidate - steps > left) {
+        left = candidate - steps;
+      }
+      if (candidate + steps < right) {
+        right = candidate + steps;
+      }
+
       while (left <= right) {
         arr.push(left);
         left++;
@@ -112,8 +124,18 @@ export function defineMovementArea(positionedCharacter, boardSize) {
   }
 
   // center line
-  let left = currentPosition - steps;
-  let right = currentPosition + steps;
+  lineBorders = findFirstAndLastCellOfLine(currentPosition, boardSize);
+  left = lineBorders[0];
+  right = lineBorders[1];
+
+  if (currentPosition - steps > left) {
+    left = currentPosition - steps;
+  }
+
+  if (currentPosition + steps < right) {
+    right = currentPosition + steps;
+  }
+
   while (left <= right) {
     arr.push(left);
     left++;
@@ -123,9 +145,18 @@ export function defineMovementArea(positionedCharacter, boardSize) {
   candidate = 0;
   for (let step = 1; step <= steps; step++) {
     candidate = currentPosition + (step * lineLength);
-    if (candidate >= 0 && candidate <= boardSize) {
-      left = candidate - steps;
-      right = candidate + steps;
+    if (candidate >= 0 && candidate < boardSize) {
+      lineBorders = findFirstAndLastCellOfLine(candidate, boardSize);
+      left = lineBorders[0];
+      right = lineBorders[1];
+
+      if (candidate - steps > left) {
+        left = candidate - steps;
+      }
+      if (candidate + steps < right) {
+        right = candidate + steps;
+      }
+
       while (left <= right) {
         arr.push(left);
         left++;
