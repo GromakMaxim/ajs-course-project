@@ -2,24 +2,23 @@ import {
   defineEnemyPossiblePositions,
   definePlayerPossiblePositions,
   definePositionedCharacter,
-  selectRndPositionFromArray
+  selectRndPositionFromArray,
 } from './utils';
 
 export default class Team {
-  constructor(positionedCharacters, owner, boardSize) {
-    this.members = positionedCharacters;
+  constructor(characters, owner, boardSize) {
+    this.members = characters;
     this.owner = owner;
-    this.boardSize = boardSize;
-    this.setPositions();
+    this.setPositions(boardSize);
   }
 
-  setPositions() {
+  setPositions(boardSize) {
     let possiblePositions;
 
     if (this.owner === 'player') {
-      possiblePositions = definePlayerPossiblePositions(this.boardSize);
+      possiblePositions = definePlayerPossiblePositions(boardSize);
     } else {
-      possiblePositions = defineEnemyPossiblePositions(this.boardSize);
+      possiblePositions = defineEnemyPossiblePositions(boardSize);
     }
     const rndPositions = selectRndPositionFromArray(possiblePositions, this.members.length);
     this.members = definePositionedCharacter(this.members, rndPositions);

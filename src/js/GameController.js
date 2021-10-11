@@ -9,6 +9,8 @@ import Daemon from './characters/Daemon';
 import cursors from './cursors';
 import actions from './actions';
 import FieldNavigation from './FieldNavigation';
+import GameState from './GameState';
+import NPCStrategy from './strategy/NPCStrategy';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -33,7 +35,6 @@ export default class GameController {
   }
 
   onCellClick(index) {
-    console.log(this.gamePlay.selectedCharacter);
     const heroesPositions = this.heroes.getPositions();
     const enemiesPositions = this.enemies.getPositions();
 
@@ -50,13 +51,16 @@ export default class GameController {
       const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
       const attackArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
 
+      // move
       if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
         char.position = index;
         this.refresh();
         this.deselectAll();
+        this.turn('enemy');
       }
 
+      // attack
       if (attackArea.includes(index) && enemiesPositions.includes(index)) {
         const enemyTarget = this.enemies.findMemberByPosition(index).character;
         this.gamePlay.showDamage(index, this.gamePlay.selectedCharacter.attack)
@@ -67,6 +71,7 @@ export default class GameController {
               this.enemies.deleteMemberByPosition(index);
               this.allChars = this.heroes.members.concat(this.enemies.members);
               this.refresh();
+              this.turn('enemy');
             }
           });
       }
@@ -119,5 +124,29 @@ export default class GameController {
         this.gamePlay.deselectCell(i);
       }
     }
+  }
+
+  turn(turn) {
+    GameState.turn = turn;
+    // eslint-disable-next-line no-new
+    const npcStrategy = new NPCStrategy(this.gamePlay, this.heroes, this.enemies, this.allChars);
+    npcStrategy.analyze();
+  }
+
+  selectedPosition(index) {
+    GameState.selected = index;
+  }
+
+  playerScore(integer) {
+    GameState.score = integer;
+  }
+
+  posCharacter(chars) {
+    GameState.chars = chars;
+  }
+
+  theme(theme) {
+    GameState.theme = theme;
+
   }
 }

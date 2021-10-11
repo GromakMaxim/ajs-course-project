@@ -214,9 +214,8 @@ export default class FieldNavigation {
       step++;
     }
 
-    arr.push(currentPosition);
+    // arr.push(currentPosition);
     arr.sort((i1, i2) => i1 - i2);
-
     return arr;
   }
 }
