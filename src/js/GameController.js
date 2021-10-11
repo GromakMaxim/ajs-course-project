@@ -33,21 +33,21 @@ export default class GameController {
   }
 
   onCellClick(index) {
-    const found = this.heroes.members
-      .filter((item) => item.position === index);
+    const heroesPositions = this.heroes.getPositions();
+    const enemiesPositions = this.enemies.getPositions();
 
-    if (found !== null && found.length !== 0) {
+    if (heroesPositions.includes(index)) {
       this.heroes.members.forEach((item) => this.gamePlay.deselectCell(item.position));
 
       this.gamePlay.selectedCharacter = this.heroes.members
         .find((item) => item.position === index);
       this.gamePlay.selectCell(index);
-      this.gamePlay.showCellTooltip(found[0].character.type, index);
+      // this.gamePlay.showCellTooltip(found[0].character.type, index);
     }
 
     if (this.gamePlay.selectedCharacter !== null) {
       const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
-      if (movementArea.includes(index)) {
+      if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
         char.position = index;
         this.refresh();
@@ -59,32 +59,29 @@ export default class GameController {
   onCellEnter(index) {
     const heroesPositions = this.heroes.getPositions();
     const enemiesPositions = this.enemies.getPositions();
-    const allPositions = heroesPositions.concat(enemiesPositions);
-
-    if (allPositions.includes(index)) this.gamePlay.setCursor(cursors.pointer);
 
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
       const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
       const attackArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
 
-      if (movementArea.includes(index)) {
+      if (attackArea.includes(index) && enemiesPositions.includes(index)) {
+        this.gamePlay.setCursor(cursors.crosshair);
+      } else if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         this.gamePlay.setCursor(cursors.pointer);
         this.gamePlay.selectCell(index, 'green');
-      } else if (enemiesPositions.includes(index) && (attackArea.includes(index))) {
-        this.gamePlay.setCursor(cursors.crosshair);
-        this.gamePlay.selectCell(index, 'red');
       } else {
         this.gamePlay.setCursor(cursors.notallowed);
       }
     }
+
+    if (heroesPositions.includes(index)) this.gamePlay.setCursor(cursors.pointer);
   }
 
   onCellLeave(index) {
+    this.gamePlay.setCursor(cursors.auto);
     const heroesPositions = this.heroes.getPositions();
     const enemiesPositions = this.enemies.getPositions();
-    const allPositions = heroesPositions.concat(enemiesPositions);
-
-    if (allPositions.includes(index)) this.gamePlay.setCursor(cursors.auto);
+    //const allPositions = heroesPositions.concat(enemiesPositions);
 
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
       this.gamePlay.deselectCell(index);
