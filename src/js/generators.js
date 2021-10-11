@@ -6,6 +6,8 @@
  * @returns Character type children (ex. Magician, Bowman, etc)
  */
 
+import Team from './Team';
+
 export function characterGenerator(allowedTypes, maxLevel) {
   if (allowedTypes.length === 0) throw new Error('types array is missing');
   const rndType = allowedTypes[Math.floor(Math.random() * allowedTypes.length)];
@@ -16,11 +18,11 @@ export function characterGenerator(allowedTypes, maxLevel) {
   return new rndType(rndLevel, rndTypeViaString);
 }
 
-export function generateTeam(allowedTypes, maxLevel, characterCount) {
+export function generateTeam(allowedTypes, maxLevel, characterCount, boardSize, owner) {
   const rndTeamMembers = [];
   for (let i = 0; i < characterCount; i++) {
     const generator = characterGenerator(allowedTypes, maxLevel);
     rndTeamMembers.push(generator);
   }
-  return rndTeamMembers;
+  return new Team(rndTeamMembers, owner, boardSize);
 }

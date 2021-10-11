@@ -229,4 +229,5 @@ export default class GamePlay {
       throw new Error('GamePlay not bind to DOM');
     }
   }
+
 }

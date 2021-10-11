@@ -1,11 +1,7 @@
 import Bowman from '../../characters/Bowman';
 import Swordsman from '../../characters/Swordsman';
-import { definePositionedCharacter, definePositionedTeams } from '../../utils';
 import PositionedCharacter from '../../PositionedCharacter';
-import Magician from '../../characters/Magician';
-import Undead from '../../characters/Undead';
-import Daemon from '../../characters/Daemon';
-import Vampire from '../../characters/Vampire';
+import { definePositionedCharacter } from '../../utils';
 
 test('expect correct array with positioned characters', () => {
   const bow = new Bowman(5, 'bowman');
@@ -59,21 +55,4 @@ test('expect correct array (team members < positions)', () => {
 
   expect(actual)
     .toStrictEqual(expected);
-});
-
-test('expect correct array', () => {
-  const char1 = new Bowman(5, 'bowman');
-  const char2 = new Magician(10, 'magician');
-  const char3 = new Swordsman(3, 'swordsman');
-
-  const enemy1 = new Undead(3, 'undead');
-  const enemy2 = new Vampire(6, 'vampire');
-  const enemy3 = new Daemon(7, 'daemon');
-
-  const team1 = [char1, char2, char3];
-  const team2 = [enemy1, enemy2, enemy3];
-  const testBoardSize = 64;
-
-  const actual = definePositionedTeams(team1, team2, testBoardSize);
-  if (actual === null) throw new Error('test failed!');
 });

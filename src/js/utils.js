@@ -17,20 +17,6 @@ export function calcTileType(index, boardSize) {
   return 'center';
 }
 
-export function definePositionedTeams(teamPlayer, teamEnemy, boardSize) {
-  boardSize *= boardSize;
-  const possiblePlayerPositions = definePlayerPossiblePositions(boardSize);
-  const rndPositionsPlayer = selectRndPositionFromArray(possiblePlayerPositions, teamPlayer.length);
-
-  const possibleEnemyPositions = defineEnemyPossiblePositions(boardSize);
-  const rndPositionsEnemy = selectRndPositionFromArray(possibleEnemyPositions, teamEnemy.length);
-
-  const positionedTeamA = definePositionedCharacter(teamPlayer, rndPositionsPlayer);
-  const positionedTeamB = definePositionedCharacter(teamEnemy, rndPositionsEnemy);
-
-  return positionedTeamA.concat(positionedTeamB);
-}
-
 export function definePositionedCharacter(team, positions) {
   // its okay, when team <= positions number. but the reverse situation is impossible
   if (team.size > positions.size) throw new Error('the size of the team is not equal to the number of available positions');
@@ -79,102 +65,7 @@ export function defineEnemyPossiblePositions(boardSize) {
 }
 
 export function calcHealthLevel(health) {
-  if (health < 15) {
-    return 'critical';
-  }
-
-  if (health < 50) {
-    return 'normal';
-  }
-
+  if (health < 15) return 'critical';
+  if (health < 50) return 'normal';
   return 'high';
-}
-
-export function defineMovementArea(positionedCharacter, boardSize) {
-  const arr = [];
-
-  const currentPosition = positionedCharacter.position;
-  const steps = positionedCharacter.character.movementDistance;
-  const lineLength = Math.sqrt(boardSize);
-  let lineBorders;
-  let left;
-  let right;
-
-  // go down
-  let candidate = 0;
-  for (let step = 1; step <= steps; step++) {
-    candidate = currentPosition - (step * lineLength);
-    if (candidate > 0) {
-      lineBorders = findFirstAndLastCellOfLine(candidate, boardSize);
-      left = lineBorders[0];
-      right = lineBorders[1];
-
-      if (candidate - steps > left) {
-        left = candidate - steps;
-      }
-      if (candidate + steps < right) {
-        right = candidate + steps;
-      }
-
-      while (left <= right) {
-        arr.push(left);
-        left++;
-      }
-    }
-  }
-
-  // center line
-  lineBorders = findFirstAndLastCellOfLine(currentPosition, boardSize);
-  left = lineBorders[0];
-  right = lineBorders[1];
-
-  if (currentPosition - steps > left) {
-    left = currentPosition - steps;
-  }
-
-  if (currentPosition + steps < right) {
-    right = currentPosition + steps;
-  }
-
-  while (left <= right) {
-    arr.push(left);
-    left++;
-  }
-
-  // go up
-  candidate = 0;
-  for (let step = 1; step <= steps; step++) {
-    candidate = currentPosition + (step * lineLength);
-    if (candidate >= 0 && candidate < boardSize) {
-      lineBorders = findFirstAndLastCellOfLine(candidate, boardSize);
-      left = lineBorders[0];
-      right = lineBorders[1];
-
-      if (candidate - steps > left) {
-        left = candidate - steps;
-      }
-      if (candidate + steps < right) {
-        right = candidate + steps;
-      }
-
-      while (left <= right) {
-        arr.push(left);
-        left++;
-      }
-    }
-  }
-  arr.sort((a, b) => a - b);
-  return arr;
-}
-
-export function findFirstAndLastCellOfLine(currentPosition, boardSize) {
-  const lineLength = Math.sqrt(boardSize);
-  if (currentPosition < lineLength) return [0, lineLength - 1];
-  let i = currentPosition;
-  while (true) {
-    if (i % Math.sqrt(boardSize) === 0) {
-      return [i, i + lineLength - 1];
-    }
-    i--;
-  }
 }
