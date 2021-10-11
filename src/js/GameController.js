@@ -33,6 +33,7 @@ export default class GameController {
   }
 
   onCellClick(index) {
+    console.log(this.gamePlay.selectedCharacter);
     const heroesPositions = this.heroes.getPositions();
     const enemiesPositions = this.enemies.getPositions();
 
@@ -47,11 +48,27 @@ export default class GameController {
 
     if (this.gamePlay.selectedCharacter !== null) {
       const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
+      const attackArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
+
       if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
         char.position = index;
         this.refresh();
         this.deselectAll();
+      }
+
+      if (attackArea.includes(index) && enemiesPositions.includes(index)) {
+        const enemyTarget = this.enemies.findMemberByPosition(index).character;
+        this.gamePlay.showDamage(index, this.gamePlay.selectedCharacter.attack)
+          .then(() => {
+            enemyTarget.health -= Math.max(this.gamePlay.selectedCharacter.character.attack - enemyTarget.defence, this.gamePlay.selectedCharacter.character.attack * 0.1);
+            this.refresh();
+            if (enemyTarget.health <= 0) {
+              this.enemies.deleteMemberByPosition(index);
+              this.allChars = this.heroes.members.concat(this.enemies.members);
+              this.refresh();
+            }
+          });
       }
     }
   }

@@ -32,4 +32,8 @@ export default class Team {
   findMemberByPosition(index) {
     return this.members.find((item) => item.position === index);
   }
+
+  deleteMemberByPosition(index) {
+    this.members.splice(this.members.findIndex((item) => item.position === index), 1);
+  }
 }
