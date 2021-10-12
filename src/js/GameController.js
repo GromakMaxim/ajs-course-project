@@ -57,7 +57,7 @@ export default class GameController {
       if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
         char.position = index;
-        console.log(`Игрок: переход на клетку ${index}`);
+        console.log(`Игрок: переход ${char.character.type} на клетку ${index}`);
         this.refresh();
         this.deselectAll();
         this.turn('enemy');
@@ -65,13 +65,14 @@ export default class GameController {
 
       // attack
       if (attackArea.includes(index) && enemiesPositions.includes(index)) {
-        const enemyTarget = this.enemies.findMemberByPosition(index).character;
-        this.gamePlay.showDamage(index, this.gamePlay.selectedCharacter.attack)
+        const attacker = this.gamePlay.selectedCharacter.character;
+        const target = this.enemies.findMemberByPosition(index).character;
+        const damage = Math.max(attacker.attack - target.defence, attacker.attack * 0.1);
+        target.health -= damage;
+        this.gamePlay.showDamage(index, damage)
           .then(() => {
-            const damage = Math.max(this.gamePlay.selectedCharacter.character.attack - enemyTarget.defence, this.gamePlay.selectedCharacter.character.attack * 0.1);
-            enemyTarget.health -= damage;
-            console.log(`Игрок нанёс урон: ${damage}`);
-            if (enemyTarget.health <= 0) {
+            console.log(`Игрок нанёс урон персонажу ${target.type}: ${damage}`);
+            if (target.health <= 0) {
               this.enemies.deleteMemberByPosition(index);
               this.allChars = this.heroes.members.concat(this.enemies.members);
             }
