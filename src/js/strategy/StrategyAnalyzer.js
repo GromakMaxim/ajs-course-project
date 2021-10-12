@@ -1,26 +1,25 @@
-import AttackStrategy from './AttackStrategy.js';
+import AttackStrategy from './AttackStrategy';
 import DefenceStrategy from './DefenceStrategy';
 
-export default class NPCStrategy {
-  constructor(gamePlay, heroesTeam, enemiesTeam, allChars) {
+export default class StrategyAnalyzer {
+  constructor(gamePlay, gameController) {
     this.gamePlay = gamePlay;
-    this.heroes = heroesTeam;
-    this.enemies = enemiesTeam;
-    this.allChars = allChars;
+    this.gameController = gameController;
   }
 
   analyze() {
+    console.log('Ход компьютера... ');
     const result = this.findShooters();
 
     switch (result) {
       case -1:
       case 0:
-        new AttackStrategy(this.gamePlay, this.heroes, this.enemies, this.allChars)
+        new AttackStrategy(this.gamePlay, this.gameController)
           .process();
         break;
 
       case 1:
-        new DefenceStrategy(this.gamePlay, this.heroes, this.enemies, this.allChars)
+        new DefenceStrategy(this.gamePlay, this.gameController)
           .process();
         break;
 
@@ -29,10 +28,10 @@ export default class NPCStrategy {
   }
 
   findShooters() {
-    const npcShooters = this.enemies.members
+    const npcShooters = this.gameController.enemies.members
       .filter((item) => item.character.type === 'vampire' || item.character.type === 'daemon')
       .length;
-    const playerShooters = this.heroes.members
+    const playerShooters = this.gameController.heroes.members
       .filter((item) => item.character.type === 'magician' || item.character.type === 'bowman')
       .length;
 

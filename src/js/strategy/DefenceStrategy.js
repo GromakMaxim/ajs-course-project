@@ -1,8 +1,10 @@
+import FieldNavigation from '../FieldNavigation';
+
 export default class DefenceStrategy {
-  constructor(gamePlay, heroes, enemies) {
+  constructor(gamePlay, gameController) {
     this.gamePlay = gamePlay;
-    this.heroes = heroes;
-    this.enemies = enemies;
+    this.gameController = gameController;
+    this.navigation = new FieldNavigation(this.gamePlay.boardSize ** 2);
   }
 
   process() {

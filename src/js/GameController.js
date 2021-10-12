@@ -10,7 +10,7 @@ import cursors from './cursors';
 import actions from './actions';
 import FieldNavigation from './FieldNavigation';
 import GameState from './GameState';
-import NPCStrategy from './strategy/NPCStrategy';
+import StrategyAnalyzer from './strategy/StrategyAnalyzer';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -18,6 +18,7 @@ export default class GameController {
     this.stateService = stateService;
     this.navigation = new FieldNavigation(this.gamePlay.boardSize ** 2);
     this.theme = new ThemesCollection();
+    this.strategyAnalyzer = new StrategyAnalyzer(this.gamePlay, this);
   }
 
   init() {
@@ -56,6 +57,7 @@ export default class GameController {
       if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
         const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
         char.position = index;
+        console.log(`Игрок: переход на клетку ${index}`);
         this.refresh();
         this.deselectAll();
         this.turn('enemy');
@@ -66,16 +68,16 @@ export default class GameController {
         const enemyTarget = this.enemies.findMemberByPosition(index).character;
         this.gamePlay.showDamage(index, this.gamePlay.selectedCharacter.attack)
           .then(() => {
-            enemyTarget.health -= Math.max(this.gamePlay.selectedCharacter.character.attack - enemyTarget.defence, this.gamePlay.selectedCharacter.character.attack * 0.1);
-            this.refresh();
+            const damage = Math.max(this.gamePlay.selectedCharacter.character.attack - enemyTarget.defence, this.gamePlay.selectedCharacter.character.attack * 0.1);
+            enemyTarget.health -= damage;
+            console.log(`Игрок нанёс урон: ${damage}`);
             if (enemyTarget.health <= 0) {
               this.enemies.deleteMemberByPosition(index);
               this.allChars = this.heroes.members.concat(this.enemies.members);
-              this.refresh();
-
-              this.checkWinningCondition();
-              this.turn('enemy');
             }
+            this.refresh();
+            this.checkWinningCondition();
+            this.turn('enemy');
           });
       }
     }
@@ -104,10 +106,6 @@ export default class GameController {
 
   onCellLeave(index) {
     this.gamePlay.setCursor(cursors.auto);
-    const heroesPositions = this.heroes.getPositions();
-    const enemiesPositions = this.enemies.getPositions();
-    //const allPositions = heroesPositions.concat(enemiesPositions);
-
     if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
       this.gamePlay.deselectCell(index);
     }
@@ -115,10 +113,6 @@ export default class GameController {
 
   refresh() {
     this.gamePlay.redrawPositions(this.allChars);
-    // if (this.gamePlay.selectedCharacter != null) {
-    //   this.gamePlay.deselectCell(this.gamePlay.selectedCharacter.position);
-    //   this.gamePlay.selectedCharacter = null;
-    // }
   }
 
   deselectAll() {
@@ -131,9 +125,7 @@ export default class GameController {
 
   turn(turn) {
     GameState.turn = turn;
-    // eslint-disable-next-line no-new
-    const npcStrategy = new NPCStrategy(this.gamePlay, this.heroes, this.enemies, this.allChars);
-    npcStrategy.analyze();
+    this.strategyAnalyzer.analyze();
   }
 
   selectedPosition(index) {

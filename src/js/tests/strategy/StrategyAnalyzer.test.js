@@ -1,4 +1,4 @@
-import NPCStrategy from '../../strategy/NPCStrategy';
+import StrategyAnalyzer from '../../strategy/StrategyAnalyzer';
 import Swordsman from '../../characters/entity/Swordsman';
 import Bowman from '../../characters/entity/Bowman';
 import Magician from '../../characters/entity/Magician';
@@ -18,7 +18,7 @@ test('expect 1', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new NPCStrategy(null, heroes, enemies);
+  const strategy = new StrategyAnalyzer(null, heroes, enemies);
   expect(strategy.findShooters())
     .toEqual(1);
 });
@@ -35,7 +35,7 @@ test('expect 0', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new NPCStrategy(null, heroes, enemies);
+  const strategy = new StrategyAnalyzer(null, heroes, enemies);
   expect(strategy.findShooters())
     .toEqual(0);
 });
@@ -52,7 +52,7 @@ test('expect -1', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new NPCStrategy(null, heroes, enemies);
+  const strategy = new StrategyAnalyzer(null, heroes, enemies);
   expect(strategy.findShooters())
     .toEqual(-1);
 });
