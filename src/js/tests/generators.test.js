@@ -1,7 +1,7 @@
 import { characterGenerator } from '../generators.js';
-import Bowman from '../characters/Bowman';
-import Swordsman from '../characters/Swordsman';
-import Magician from '../characters/Magician';
+import Bowman from '../characters/entity/Bowman';
+import Swordsman from '../characters/entity/Swordsman';
+import Magician from '../characters/entity/Magician';
 
 test('expect randomly created character', () => {
   const testCase = [Swordsman, Bowman, Magician];

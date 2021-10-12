@@ -1,10 +1,10 @@
 import NPCStrategy from '../../strategy/NPCStrategy';
-import Swordsman from '../../characters/Swordsman';
-import Bowman from '../../characters/Bowman';
-import Magician from '../../characters/Magician';
+import Swordsman from '../../characters/entity/Swordsman';
+import Bowman from '../../characters/entity/Bowman';
+import Magician from '../../characters/entity/Magician';
 import Team from '../../Team';
-import Vampire from '../../characters/Vampire';
-import Undead from '../../characters/Undead';
+import Vampire from '../../characters/entity/Vampire';
+import Undead from '../../characters/entity/Undead';
 
 test('expect 1', () => {
   const h1 = new Swordsman(5, 'swordsman');

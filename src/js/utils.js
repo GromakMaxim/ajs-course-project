@@ -1,4 +1,4 @@
-import PositionedCharacter from './PositionedCharacter';
+import PositionedCharacter from './characters/PositionedCharacter';
 
 export function calcTileType(index, boardSize) {
   const lastCell = boardSize * boardSize - 1;

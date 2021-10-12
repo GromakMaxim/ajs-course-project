@@ -1,9 +1,9 @@
 // eslint-disable-next-line import/named
-import PositionedCharacter from '../../PositionedCharacter';
-import Bowman from '../../characters/Bowman';
+import PositionedCharacter from '../../characters/PositionedCharacter';
+import Bowman from '../../characters/entity/Bowman';
 import actions from '../../actions';
-import Swordsman from '../../characters/Swordsman';
-import Magician from '../../characters/Magician';
+import Swordsman from '../../characters/entity/Swordsman';
+import Magician from '../../characters/entity/Magician';
 import FieldNavigation from '../../FieldNavigation';
 
 const heroes = [

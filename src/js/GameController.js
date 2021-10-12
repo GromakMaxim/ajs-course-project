@@ -1,11 +1,11 @@
-import themes from './themes.js';
+import ThemesCollection from './ThemesCollection.js';
 import { generateTeam } from './generators';
-import Swordsman from './characters/Swordsman';
-import Bowman from './characters/Bowman';
-import Vampire from './characters/Vampire';
-import Magician from './characters/Magician';
-import Undead from './characters/Undead';
-import Daemon from './characters/Daemon';
+import Swordsman from './characters/entity/Swordsman';
+import Bowman from './characters/entity/Bowman';
+import Vampire from './characters/entity/Vampire';
+import Magician from './characters/entity/Magician';
+import Undead from './characters/entity/Undead';
+import Daemon from './characters/entity/Daemon';
 import cursors from './cursors';
 import actions from './actions';
 import FieldNavigation from './FieldNavigation';
@@ -17,10 +17,11 @@ export default class GameController {
     this.gamePlay = gamePlay;
     this.stateService = stateService;
     this.navigation = new FieldNavigation(this.gamePlay.boardSize ** 2);
+    this.theme = new ThemesCollection();
   }
 
   init() {
-    this.gamePlay.drawUi(themes.prairie);
+    this.gamePlay.drawUi(this.theme.getCurrentTheme());
     this.heroes = generateTeam([Swordsman, Bowman, Magician], 1, 2, this.gamePlay.boardSize ** 2, 'player');
     this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
     this.allChars = this.heroes.members.concat(this.enemies.members);
@@ -71,6 +72,8 @@ export default class GameController {
               this.enemies.deleteMemberByPosition(index);
               this.allChars = this.heroes.members.concat(this.enemies.members);
               this.refresh();
+
+              this.checkWinningCondition();
               this.turn('enemy');
             }
           });
@@ -145,8 +148,11 @@ export default class GameController {
     GameState.chars = chars;
   }
 
-  theme(theme) {
-    GameState.theme = theme;
-
+  checkWinningCondition() {
+    if (this.enemies.members.length === 0) {
+      console.log('Игрок победил!');
+      this.theme.next();
+      this.init();
+    }
   }
 }

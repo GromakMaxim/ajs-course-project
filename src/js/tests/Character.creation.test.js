@@ -1,5 +1,5 @@
-import Character from '../Character.js';
-import Magician from '../characters/Magician';
+import Character from '../characters/Character.js';
+import Magician from '../characters/entity/Magician';
 
 test('expect exception. cant create new obj', () => {
   expect(() => {

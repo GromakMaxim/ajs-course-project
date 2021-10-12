@@ -1,6 +1,6 @@
-import Bowman from '../../characters/Bowman';
-import Swordsman from '../../characters/Swordsman';
-import PositionedCharacter from '../../PositionedCharacter';
+import Bowman from '../../characters/entity/Bowman';
+import Swordsman from '../../characters/entity/Swordsman';
+import PositionedCharacter from '../../characters/PositionedCharacter';
 import { definePositionedCharacter } from '../../utils';
 
 test('expect correct array with positioned characters', () => {
