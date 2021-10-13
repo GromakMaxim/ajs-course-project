@@ -14,6 +14,7 @@ import StrategyAnalyzer from './strategy/StrategyAnalyzer';
 import Hint from './Tip';
 import VictoryConditionsChecker from './VictoryConditionsChecker';
 import GameStateService from './GameStateService';
+import Team from './characters/Team';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -163,5 +164,15 @@ export default class GameController {
   saveGame() {
     const state = new GameState(this);
     this.stateService.save(state);
+  }
+
+  loadGame() {
+    const temp = this.stateService.load();
+    this.heroes = new Team(temp.heroesTeam.members, temp.heroesTeam.owner);
+    this.enemies = new Team(temp.enemyTeam.members, temp.enemyTeam.owner);
+
+    this.allChars = temp.heroesTeam.members.concat(temp.enemyTeam.members);
+    this.theme.setPointer(temp.theme);
+    this.refresh();
   }
 }

@@ -9,7 +9,9 @@ export default class Team {
   constructor(characters, owner, boardSize) {
     this.members = characters;
     this.owner = owner;
-    this.setPositions(boardSize);
+    if (boardSize !== null && boardSize !== undefined) {
+      this.setPositions(boardSize);
+    }
   }
 
   setPositions(boardSize) {
