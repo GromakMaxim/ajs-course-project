@@ -16,14 +16,17 @@ export default class VictoryConditionsChecker {
   checkWinningCondition() {
     if (this.gameController.enemies.members.length === 0) {
       console.log('Player has won!');
-      this.gameController.theme.next();
-      this.gameController.init();
+      const isChanged = this.gameController.theme.next();
+      if (!isChanged) {
+        this.gameController.isBlocked = true;
+      } else {
+        this.gameController.init();
+      }
     }
 
     if (this.gameController.heroes.members.length === 0) {
       console.log('Computer has won!');
       this.gameController.isBlocked = true;
-      // this.gameController.init();
     }
   }
 }
