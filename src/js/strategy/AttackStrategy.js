@@ -1,6 +1,7 @@
 // units are trying to get closer and engage in close combat
 import actions from '../actions';
 import FieldNavigation from '../FieldNavigation';
+import VictoryConditionsChecker from '../VictoryConditionsChecker';
 
 export default class AttackStrategy {
   constructor(gamePlay, gameController) {
@@ -26,7 +27,7 @@ export default class AttackStrategy {
         if (target.health <= 0) {
           this.gameController.heroes.deleteMemberByPosition(positionsToAttack[0]);
           this.gameController.allChars = this.gameController.heroes.members.concat(this.gameController.enemies.members);
-          this.checkWinningCondition();
+          new VictoryConditionsChecker().checkWinningCondition();
           if (target === this.gamePlay.selectedCharacter.character) {
             this.gamePlay.selectedCharacter = null;
           }
@@ -35,12 +36,5 @@ export default class AttackStrategy {
       }
     }
     console.log('Ход игрока...');
-  }
-
-  checkWinningCondition() {
-    if (this.gameController.heroes.members.length === 0) {
-      console.log('Компьютер победил!');
-      this.gameController.init();
-    }
   }
 }
