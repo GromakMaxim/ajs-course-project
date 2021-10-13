@@ -11,6 +11,7 @@ import actions from './actions';
 import FieldNavigation from './FieldNavigation';
 import GameState from './GameState';
 import StrategyAnalyzer from './strategy/StrategyAnalyzer';
+import Hint from './Tip';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -46,7 +47,6 @@ export default class GameController {
       this.gamePlay.selectedCharacter = this.heroes.members
         .find((item) => item.position === index);
       this.gamePlay.selectCell(index);
-      // this.gamePlay.showCellTooltip(found[0].character.type, index);
     }
 
     if (this.gamePlay.selectedCharacter !== null) {
@@ -101,7 +101,7 @@ export default class GameController {
         this.gamePlay.setCursor(cursors.notallowed);
       }
     }
-
+    this.getTip(index);
     if (heroesPositions.includes(index)) this.gamePlay.setCursor(cursors.pointer);
   }
 
@@ -146,6 +146,22 @@ export default class GameController {
       console.log('Игрок победил!');
       this.theme.next();
       this.init();
+    }
+  }
+
+  getTip(index) {
+    let found = null;
+    if (this.heroes.getPositions()
+      .includes(index)) {
+      found = this.heroes.findMemberByPosition(index);
+    } else if (this.enemies.getPositions()
+      .includes(index)) {
+      found = this.enemies.findMemberByPosition(index);
+    }
+    if (found !== null && found !== undefined) {
+      found = found.character;
+      const hint = new Hint(found.level, found.attack, found.defence, found.health).getHint();
+      this.gamePlay.showCellTooltip(hint, index);
     }
   }
 }
