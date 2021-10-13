@@ -13,6 +13,7 @@ import GameState from './GameState';
 import StrategyAnalyzer from './strategy/StrategyAnalyzer';
 import Hint from './Tip';
 import VictoryConditionsChecker from './VictoryConditionsChecker';
+import GameStateService from './GameStateService';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -23,6 +24,7 @@ export default class GameController {
     this.strategyAnalyzer = new StrategyAnalyzer(this.gamePlay, this);
     this.VCChecker = new VictoryConditionsChecker();
     this.isBlocked = false; // if player loose or successfully pass all levels -> become 'true';
+    this.stateService = new GameStateService();
   }
 
   init() {
@@ -35,6 +37,9 @@ export default class GameController {
     this.gamePlay.addCellLeaveListener((index) => this.onCellLeave(index));
     this.gamePlay.addCellEnterListener((index) => this.onCellEnter(index));
     this.gamePlay.addCellClickListener((index) => this.onCellClick(index));
+    this.gamePlay.addNewGameListener(() => this.init());
+    this.gamePlay.addSaveGameListener(() => this.saveGame());
+    this.gamePlay.addLoadGameListener(() => this.loadGame());
     this.VCChecker.setGameController(this);
 
     // TODO: add event listeners to gamePlay events
@@ -139,18 +144,6 @@ export default class GameController {
     this.strategyAnalyzer.analyze();
   }
 
-  selectedPosition(index) {
-    GameState.selected = index;
-  }
-
-  playerScore(integer) {
-    GameState.score = integer;
-  }
-
-  posCharacter(chars) {
-    GameState.chars = chars;
-  }
-
   getTip(index) {
     let found = null;
     if (this.heroes.getPositions()
@@ -165,5 +158,10 @@ export default class GameController {
       const hint = new Hint(found.level, found.attack, found.defence, found.health).getHint();
       this.gamePlay.showCellTooltip(hint, index);
     }
+  }
+
+  saveGame() {
+    const state = new GameState(this);
+    this.stateService.save(state);
   }
 }

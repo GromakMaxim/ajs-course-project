@@ -2,7 +2,7 @@ import StrategyAnalyzer from '../../strategy/StrategyAnalyzer';
 import Swordsman from '../../characters/entity/Swordsman';
 import Bowman from '../../characters/entity/Bowman';
 import Magician from '../../characters/entity/Magician';
-import Team from '../../Team';
+import Team from '../../characters/Team';
 import Vampire from '../../characters/entity/Vampire';
 import Undead from '../../characters/entity/Undead';
 

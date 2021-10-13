@@ -3,7 +3,7 @@ import {
   definePlayerPossiblePositions,
   definePositionedCharacter,
   selectRndPositionFromArray,
-} from './utils';
+} from '../utils';
 
 export default class Team {
   constructor(characters, owner, boardSize) {

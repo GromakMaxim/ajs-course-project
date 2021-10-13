@@ -6,7 +6,7 @@
  * @returns Character type children (ex. Magician, Bowman, etc)
  */
 
-import Team from './Team';
+import Team from './characters/Team';
 
 export function characterGenerator(allowedTypes, maxLevel) {
   if (allowedTypes.length === 0) throw new Error('types array is missing');
