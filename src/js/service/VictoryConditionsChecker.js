@@ -20,6 +20,7 @@ export default class VictoryConditionsChecker {
       if (!isChanged) {
         this.gameController.isBlocked = true;
       } else {
+        this.gameController.heroes.lvlUp();
         this.gameController.init();
       }
     }

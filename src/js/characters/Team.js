@@ -37,4 +37,10 @@ export default class Team {
   deleteMemberByPosition(index) {
     this.members.splice(this.members.findIndex((item) => item.position === index), 1);
   }
+
+  lvlUp() {
+    for (const member of this.members) {
+      member.character.lvlUp();
+    }
+  }
 }
