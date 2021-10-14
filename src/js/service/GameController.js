@@ -1,20 +1,20 @@
 import ThemesCollection from './ThemesCollection.js';
-import { generateTeam } from './generators';
-import Swordsman from './characters/entity/Swordsman';
-import Bowman from './characters/entity/Bowman';
-import Vampire from './characters/entity/Vampire';
-import Magician from './characters/entity/Magician';
-import Undead from './characters/entity/Undead';
-import Daemon from './characters/entity/Daemon';
-import cursors from './cursors';
-import actions from './actions';
+import { generateTeam } from '../generators';
+import Swordsman from '../characters/entity/Swordsman';
+import Bowman from '../characters/entity/Bowman';
+import Vampire from '../characters/entity/Vampire';
+import Magician from '../characters/entity/Magician';
+import Undead from '../characters/entity/Undead';
+import Daemon from '../characters/entity/Daemon';
+import cursors from '../cursors';
+import actions from '../actions';
 import FieldNavigation from './FieldNavigation';
 import GameState from './GameState';
-import StrategyAnalyzer from './strategy/StrategyAnalyzer';
+import StrategyAnalyzer from '../strategy/StrategyAnalyzer';
 import Hint from './Tip';
 import VictoryConditionsChecker from './VictoryConditionsChecker';
 import GameStateService from './GameStateService';
-import Team from './characters/Team';
+import Team from '../characters/Team';
 
 export default class GameController {
   constructor(gamePlay, stateService) {

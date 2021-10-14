@@ -1,4 +1,4 @@
-import FieldNavigation from '../FieldNavigation';
+import FieldNavigation from '../service/FieldNavigation';
 
 export default class DefenceStrategy {
   constructor(gamePlay, gameController) {
@@ -10,5 +10,4 @@ export default class DefenceStrategy {
   process() {
     console.log('Defence selected');
   }
-
 }

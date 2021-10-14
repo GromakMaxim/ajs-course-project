@@ -3,7 +3,7 @@ import Bowman from '../../characters/entity/Bowman';
 import actions from '../../actions';
 import Swordsman from '../../characters/entity/Swordsman';
 import Magician from '../../characters/entity/Magician';
-import FieldNavigation from '../../FieldNavigation';
+import FieldNavigation from '../../service/FieldNavigation';
 
 const heroes = [
   new Swordsman(5, 'swordsman'), // 1

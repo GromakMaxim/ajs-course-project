@@ -215,16 +215,11 @@ export default class FieldNavigation {
         arr.push(this.getValue());
         step++;
       }
-
-      // arr.push(currentPosition);
-      arr.sort((i1, i2) => i1 - i2);
-      return arr;
     }
 
     // we climb to the top, then descending we add line by line coordinates within the attack range
     if (action === 'attack') {
       distance = positionedCharacter.character.attackDistance;
-      // const cols = distance * 2 + 1;
       let rows = distance * 2 + 1;
 
       let step = 1;
@@ -267,8 +262,8 @@ export default class FieldNavigation {
       }
 
       arr.splice(arr.findIndex((item) => item === currentPosition), 1);
-      arr.sort((i1, i2) => i1 - i2);
-      return arr;
     }
+    arr.sort((i1, i2) => i1 - i2);
+    return arr;
   }
 }

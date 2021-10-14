@@ -1,4 +1,4 @@
-import FieldNavigation from '../../FieldNavigation';
+import FieldNavigation from '../../service/FieldNavigation';
 
 test('expect 0', () => {
   const battlefield = new FieldNavigation(64);

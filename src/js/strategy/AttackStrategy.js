@@ -1,7 +1,7 @@
 // units are trying to get closer and engage in close combat
 import actions from '../actions';
-import FieldNavigation from '../FieldNavigation';
-import VictoryConditionsChecker from '../VictoryConditionsChecker';
+import FieldNavigation from '../service/FieldNavigation';
+import VictoryConditionsChecker from '../service/VictoryConditionsChecker';
 
 export default class AttackStrategy {
   constructor(gamePlay, gameController) {
