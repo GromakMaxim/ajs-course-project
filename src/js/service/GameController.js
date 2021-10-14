@@ -77,20 +77,9 @@ export default class GameController {
         // attack
         if (attackArea.includes(index) && enemiesPositions.includes(index)) {
           const attacker = this.gamePlay.selectedCharacter.character;
-          const target = this.enemies.findMemberByPosition(index).character;
-          const damage = Math.max(attacker.attack - target.defence, attacker.attack * 0.1);
-          target.currentHealth -= damage;
-          this.gamePlay.showDamage(index, damage)
-            .then(() => {
-              console.log(`Игрок нанёс урон персонажу ${target.type}: ${damage}`);
-              if (target.currentHealth <= 0) {
-                this.enemies.deleteMemberByPosition(index);
-                this.allChars = this.heroes.members.concat(this.enemies.members);
-              }
-              this.refresh();
-              this.VCChecker.checkWinningCondition();
-              this.turn('enemy');
-            });
+          const target = this.enemies.findMemberByPosition(index);
+          attacker.makeDamage(target, this.gamePlay, this);
+          this.turn('enemy');
         }
       }
     }

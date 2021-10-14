@@ -1,3 +1,5 @@
+import VictoryConditionsChecker from '../service/VictoryConditionsChecker';
+
 export default class Character {
   constructor(level, type = 'generic') {
     if (new.target === Character) {
@@ -65,5 +67,31 @@ export default class Character {
     if (percent <= 50) {
       this.defence += this.defence * 0.3;
     }
+  }
+
+  makeDamage(positionedTarget, gamePlay, gameController) {
+    const damage = Math.max(this.attack - positionedTarget.character.defence, this.attack * 0.1);
+    positionedTarget.character.currentHealth -= damage;
+
+    gamePlay.showDamage(positionedTarget.position, damage)
+      .then(() => {
+        console.log(`${this.type} нанёс урон персонажу ${positionedTarget.character.type}: ${damage}`);
+        if (positionedTarget.character.currentHealth <= 0) {
+          if (gameController.heroes.members.includes(positionedTarget)) {
+            gameController.heroes.deleteMemberByPosition(positionedTarget.position);
+          }
+          if (gameController.enemies.members.includes(positionedTarget)) {
+            gameController.enemies.deleteMemberByPosition(positionedTarget.position);
+          }
+
+          gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
+          new VictoryConditionsChecker().checkWinningCondition();
+          if (positionedTarget === gamePlay.selectedCharacter.character) {
+            gamePlay.selectedCharacter = null;
+          }
+        }
+        gameController.refresh();
+        gameController.VCChecker.checkWinningCondition();
+      });
   }
 }
