@@ -22,11 +22,11 @@ export default class AttackStrategy {
         const attacker = enemyUnit.character;
         const target = this.gameController.heroes.findMemberByPosition(positionsToAttack[0]).character;
         const damage = Math.max(attacker.attack - target.defence, attacker.attack * 0.1);
-        target.health -= damage;
+        target.currentHealth -= damage;
         this.gamePlay.showDamage(positionsToAttack[0], damage)
           .then(() => {
             console.log(`Компьютер нанёс урон персонажу ${target.type}: ${damage}`);
-            if (target.health <= 0) {
+            if (target.currentHealth <= 0) {
               this.gameController.heroes.deleteMemberByPosition(positionsToAttack[0]);
               this.gameController.allChars = this.gameController.heroes.members.concat(this.gameController.enemies.members);
               new VictoryConditionsChecker().checkWinningCondition();

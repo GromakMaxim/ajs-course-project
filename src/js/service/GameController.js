@@ -11,7 +11,7 @@ import actions from '../actions';
 import FieldNavigation from './FieldNavigation';
 import GameState from './GameState';
 import StrategyAnalyzer from '../strategy/StrategyAnalyzer';
-import Hint from './Tip';
+import Hint from './Hint';
 import VictoryConditionsChecker from './VictoryConditionsChecker';
 import GameStateService from './GameStateService';
 import Team from '../characters/Team';
@@ -79,11 +79,11 @@ export default class GameController {
           const attacker = this.gamePlay.selectedCharacter.character;
           const target = this.enemies.findMemberByPosition(index).character;
           const damage = Math.max(attacker.attack - target.defence, attacker.attack * 0.1);
-          target.health -= damage;
+          target.currentHealth -= damage;
           this.gamePlay.showDamage(index, damage)
             .then(() => {
               console.log(`Игрок нанёс урон персонажу ${target.type}: ${damage}`);
-              if (target.health <= 0) {
+              if (target.currentHealth <= 0) {
                 this.enemies.deleteMemberByPosition(index);
                 this.allChars = this.heroes.members.concat(this.enemies.members);
               }
@@ -155,8 +155,7 @@ export default class GameController {
       found = this.enemies.findMemberByPosition(index);
     }
     if (found !== null && found !== undefined) {
-      found = found.character;
-      const hint = new Hint(found.level, found.attack, found.defence, found.health).getHint();
+      const hint = new Hint(found.character).getHint();
       this.gamePlay.showCellTooltip(hint, index);
     }
   }
