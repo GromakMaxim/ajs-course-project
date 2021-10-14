@@ -1,5 +1,5 @@
 import Character from './Character';
-
+// wrapper for the character class
 export default class PositionedCharacter {
   constructor(character, position) {
     if (!(character instanceof Character)) {
@@ -13,5 +13,4 @@ export default class PositionedCharacter {
     this.character = character;
     this.position = position;
   }
-
 }
