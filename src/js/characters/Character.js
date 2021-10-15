@@ -79,8 +79,7 @@ export default class Character {
         if (positionedTarget.character.currentHealth <= 0) {
           if (gameController.heroes.members.includes(positionedTarget)) {
             gameController.heroes.deleteMemberByPosition(positionedTarget.position);
-          }
-          if (gameController.enemies.members.includes(positionedTarget)) {
+          } else if (gameController.enemies.members.includes(positionedTarget)) {
             gameController.enemies.deleteMemberByPosition(positionedTarget.position);
           }
           gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);

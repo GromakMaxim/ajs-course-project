@@ -90,6 +90,7 @@ export default class GameController {
           console.log(`Игрок: переход ${char.character.type} на клетку ${index}`);
           this.refresh();
           this.deselectAll();
+          this.gamePlay.selectCell(char.position);
           this.turn('enemy');
         }
 
