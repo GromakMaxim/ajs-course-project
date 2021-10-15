@@ -1,9 +1,8 @@
 import ThemesCollection from './ThemesCollection.js';
-import { generateTeam } from '../generators';
+import { characterGenerator, generateTeam } from '../generators';
 import Swordsman from '../characters/entity/Swordsman';
 import Bowman from '../characters/entity/Bowman';
 import Vampire from '../characters/entity/Vampire';
-import Magician from '../characters/entity/Magician';
 import Undead from '../characters/entity/Undead';
 import Daemon from '../characters/entity/Daemon';
 import cursors from '../cursors';
@@ -15,6 +14,7 @@ import Hint from './Hint';
 import VictoryConditionsChecker from './VictoryConditionsChecker';
 import GameStateService from './GameStateService';
 import Team from '../characters/Team';
+import Magician from '../characters/entity/Magician';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -23,16 +23,22 @@ export default class GameController {
     this.navigation = new FieldNavigation(this.gamePlay.boardSize ** 2);
     this.theme = new ThemesCollection();
     this.strategyAnalyzer = new StrategyAnalyzer(this.gamePlay, this);
-    this.VCChecker = new VictoryConditionsChecker();
     this.isBlocked = false; // if player loose or successfully pass all levels -> become 'true';
     this.stateService = new GameStateService();
+    this.VCChecker = new VictoryConditionsChecker();
+    this.survivors = [];
   }
 
-  init() {
+  init(parameter) {
     this.gamePlay.drawUi(this.theme.getCurrentTheme());
-    this.heroes = generateTeam([Swordsman, Bowman, Magician], 1, 2, this.gamePlay.boardSize ** 2, 'player');
-    this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
-    this.allChars = this.heroes.members.concat(this.enemies.members);
+
+    if (parameter !== null && parameter !== undefined) {
+      this.nextStage(parameter);
+    } else {
+      this.heroes = generateTeam([Swordsman, Bowman], 1, 2, this.gamePlay.boardSize ** 2, 'player');
+      this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
+      this.allChars = this.heroes.members.concat(this.enemies.members);
+    }
 
     this.refresh();
     this.gamePlay.addCellLeaveListener((index) => this.onCellLeave(index));
@@ -42,9 +48,22 @@ export default class GameController {
     this.gamePlay.addSaveGameListener(() => this.saveGame());
     this.gamePlay.addLoadGameListener(() => this.loadGame());
     this.VCChecker.setGameController(this);
+  }
 
-    // TODO: add event listeners to gamePlay events
-    // TODO: load saved stated from stateService
+  nextStage(parameter) {
+    console.log(`Switching to stage ${parameter}`);
+    this.heroes.lvlUp();
+    this.survivors = [];
+    for (let i = 1; i < parameter; i++) {
+      const newChar = characterGenerator([Swordsman, Bowman, Magician], parameter - 1);
+      this.survivors.push(newChar);
+    }
+
+    this.heroes.members.forEach((member) => this.survivors.push(member.character));
+    this.heroes = new Team(this.survivors, 'player', this.gamePlay.boardSize ** 2);
+    this.enemies = generateTeam([Undead, Daemon, Vampire], 1, this.heroes.members.length, this.gamePlay.boardSize ** 2, 'enemy');
+    this.enemies.randomizedLvlUp(1, parameter);
+    this.allChars = this.heroes.members.concat(this.enemies.members);
   }
 
   onCellClick(index) {

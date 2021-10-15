@@ -43,4 +43,25 @@ export default class Team {
       member.character.lvlUp();
     }
   }
+
+  randomizedLvlUp(minLevel, maxLevel) {
+    for (const member of this.members) {
+      const needToUpgrade = Math.floor(Math.random() * 2);
+      if (needToUpgrade) {
+        const rnd = Math.floor(Math.random() * (maxLevel - minLevel + 1)) + minLevel;
+        for (let i = minLevel; i < rnd; i++) {
+          member.character.lvlUp();
+        }
+      }
+    }
+  }
+
+  addMember(positionedCharacter) {
+    if (!this.getPositions()
+      .includes(positionedCharacter.position)) {
+      this.members.push(positionedCharacter);
+    } else {
+      throw new Error(`position ${positionedCharacter.position}is busy!`);
+    }
+  }
 }
