@@ -21,14 +21,15 @@ export default class VictoryConditionsChecker {
         this.gameController.isBlocked = true;
       } else {
         const parameter = this.gameController.theme.pointer + 1;
-        console.log(parameter);
         this.gameController.init(parameter);
       }
+      return true;
     }
-
     if (this.gameController.heroes.members.length === 0) {
       console.log('Computer has won!');
       this.gameController.isBlocked = true;
+      return true;
     }
+    return false;
   }
 }

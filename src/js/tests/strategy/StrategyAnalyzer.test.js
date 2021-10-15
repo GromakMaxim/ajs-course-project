@@ -5,6 +5,8 @@ import Magician from '../../characters/entity/Magician';
 import Team from '../../characters/Team';
 import Vampire from '../../characters/entity/Vampire';
 import Undead from '../../characters/entity/Undead';
+import GameController from '../../service/GameController';
+import GamePlay from '../../service/GamePlay';
 
 test('expect 1', () => {
   const h1 = new Swordsman(5, 'swordsman');
@@ -18,7 +20,12 @@ test('expect 1', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new StrategyAnalyzer(null, heroes, enemies);
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gc.enemies = enemies;
+  gc.heroes = heroes;
+
+  const strategy = new StrategyAnalyzer(gp, gc);
   expect(strategy.findShooters())
     .toEqual(1);
 });
@@ -35,7 +42,12 @@ test('expect 0', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new StrategyAnalyzer(null, heroes, enemies);
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gc.enemies = enemies;
+  gc.heroes = heroes;
+
+  const strategy = new StrategyAnalyzer(gp, gc);
   expect(strategy.findShooters())
     .toEqual(0);
 });
@@ -52,7 +64,12 @@ test('expect -1', () => {
   const heroes = new Team([h1, h2, h3], 'player', 64);
   const enemies = new Team([e1, e2, e3], 'enemy', 64);
 
-  const strategy = new StrategyAnalyzer(null, heroes, enemies);
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gc.enemies = enemies;
+  gc.heroes = heroes;
+
+  const strategy = new StrategyAnalyzer(gp, gc);
   expect(strategy.findShooters())
     .toEqual(-1);
 });

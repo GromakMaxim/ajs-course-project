@@ -36,7 +36,7 @@ export default class ThemesCollection {
         this.pointer = this.themes.length - 1;
       }
     } else {
-      if (this.pointer - 1 > 0) {
+      if (this.pointer - 1 >= 0) {
         this.pointer--;
         return true;
       }
@@ -54,5 +54,6 @@ export default class ThemesCollection {
     if (index >= 0 && index < this.themes.length) {
       return this.themes[this.pointer];
     }
+    return null;
   }
 }

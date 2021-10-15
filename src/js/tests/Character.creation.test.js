@@ -2,6 +2,11 @@ import Character from '../characters/Character.js';
 import Magician from '../characters/entity/Magician';
 import Bowman from '../characters/entity/Bowman';
 import Swordsman from '../characters/entity/Swordsman';
+import Daemon from '../characters/entity/Daemon';
+import PositionedCharacter from '../characters/PositionedCharacter';
+import GamePlay from '../service/GamePlay';
+import GameController from '../service/GameController';
+import Undead from '../characters/entity/Undead';
 
 test('expect exception. cant create new obj', () => {
   expect(() => {
@@ -9,9 +14,6 @@ test('expect exception. cant create new obj', () => {
     new Character(10);
   })
     .toThrow(Error);
-});
-
-test('expect exception. cant create new obj', () => {
   expect(() => {
     // eslint-disable-next-line no-new
     new Character(1);
@@ -19,33 +21,31 @@ test('expect exception. cant create new obj', () => {
     .toThrow('Cant create instance of Character class. Character class is abstract!');
 });
 
-test('expect level 5', () => {
-  const magician = new Magician(5, 'magician');
+test('expect level 1', () => {
+  const magician = new Magician(1, 'magician');
   expect(magician.level)
-    .toBe(5);
-});
-
-test('expect defence 40', () => {
-  const magician = new Magician(5, 'magician');
+    .toBe(1);
   expect(magician.defence)
     .toBe(40);
-});
-
-test('expect attack 10', () => {
-  const magician = new Magician(5, 'magician');
   expect(magician.attack)
+    .toBe(10);
+
+  const daemon = new Daemon(1, 'daemon');
+  expect(daemon.level)
+    .toBe(1);
+  expect(daemon.defence)
+    .toBe(40);
+  expect(daemon.attack)
     .toBe(10);
 });
 
-test('expect error (cause lvl < 1)', () => {
+test('expect error', () => {
   expect(() => {
     // eslint-disable-next-line no-new
     new Magician(-50, 'magician');
   })
     .toThrow(Error);
-});
 
-test('expect error (cause lvl == 0 )', () => {
   expect(() => {
     // eslint-disable-next-line no-new
     new Magician(0, 'magician');
@@ -216,4 +216,17 @@ test('expect lvlUp (increase all parameters, Magician)', () => {
     .toEqual(52);
   expect(ch1.defence)
     .toEqual(13);
+});
+
+test('expect damage', () => {
+  const positionedTarget = new PositionedCharacter(new Swordsman(1, 'swordsman'), 1); // 50/50
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+
+  const attacker = new Undead(1, 'undead');
+  attacker.makeDamage(positionedTarget, gp, gc); // -30
+
+  const actual = positionedTarget.character.currentHealth; // 50 - 30 = 20
+  const expected = 20;
+  expect(actual).toEqual(expected);
 });
