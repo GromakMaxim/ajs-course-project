@@ -83,10 +83,11 @@ export default class Character {
           if (gameController.enemies.members.includes(positionedTarget)) {
             gameController.enemies.deleteMemberByPosition(positionedTarget.position);
           }
-
           gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
           new VictoryConditionsChecker().checkWinningCondition();
-          if (positionedTarget === gamePlay.selectedCharacter.character) {
+          if (positionedTarget.position === gamePlay.selectedCharacter.position) {
+            gamePlay.deselectCell(gamePlay.selectedCharacter.position);
+            gameController.deselectAll();
             gamePlay.selectedCharacter = null;
           }
         }
