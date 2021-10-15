@@ -64,4 +64,8 @@ export default class Team {
       throw new Error(`position ${positionedCharacter.position}is busy!`);
     }
   }
+
+  countRemainingLives() {
+    return this.members.reduce((sum, member) => sum + member.character.currentHealth, 0);
+  }
 }

@@ -87,3 +87,24 @@ test('expect randomized lvlUp', () => {
   expect(passed)
     .toEqual(true);
 });
+
+test('expect 150', () => {
+  const p1 = new PositionedCharacter(new Bowman(1, 'bowman'), 0);
+  const p2 = new PositionedCharacter(new Swordsman(1, 'swordsman'), 3);
+  const p3 = new PositionedCharacter(new Bowman(1, 'bowman'), 10);
+  const testTeam = new Team([p1, p2, p3], 'player');
+  const actual = testTeam.countRemainingLives();
+  expect(actual)
+    .toStrictEqual(50 * 3);
+});
+
+test('expect 5000', () => {
+  const arr = [];
+  for (let i = 0; i < 100; i++) {
+    arr.push(new PositionedCharacter(new Bowman(1, 'bowman'), 0));
+  }
+  const testTeam = new Team(arr, 'player');
+  const actual = testTeam.countRemainingLives();
+  expect(actual)
+    .toStrictEqual(50 * 100);
+});

@@ -16,6 +16,7 @@ export default class VictoryConditionsChecker {
   checkWinningCondition() {
     if (this.gameController.enemies.members.length === 0) {
       console.log('Player has won!');
+      this.gameController.score += this.gameController.calculateScore();
       const isChanged = this.gameController.theme.next();
       if (!isChanged) {
         this.gameController.isBlocked = true;

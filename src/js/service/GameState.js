@@ -3,5 +3,6 @@ export default class GameState {
     this.theme = gameController.theme.pointer;
     this.enemyTeam = gameController.enemies;
     this.heroesTeam = gameController.heroes;
+    this.score = gameController.score;
   }
 }

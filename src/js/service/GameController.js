@@ -28,6 +28,7 @@ export default class GameController {
     this.stateService = new GameStateService();
     this.VCChecker = new VictoryConditionsChecker();
     this.survivors = [];
+    this.score = 0;
   }
 
   init(parameter) {
@@ -229,5 +230,9 @@ export default class GameController {
     tempCharacter.currentHealth = positionedCharacter.character.currentHealth;
 
     return new PositionedCharacter(tempCharacter, positionedCharacter.position);
+  }
+
+  calculateScore() {
+    return this.heroes.countRemainingLives();
   }
 }
