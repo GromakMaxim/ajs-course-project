@@ -15,6 +15,7 @@ import VictoryConditionsChecker from './VictoryConditionsChecker';
 import GameStateService from './GameStateService';
 import Team from '../characters/Team';
 import Magician from '../characters/entity/Magician';
+import PositionedCharacter from '../characters/PositionedCharacter';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -176,11 +177,57 @@ export default class GameController {
 
   loadGame() {
     const temp = this.stateService.load();
-    this.heroes = new Team(temp.heroesTeam.members, temp.heroesTeam.owner);
-    this.enemies = new Team(temp.enemyTeam.members, temp.enemyTeam.owner);
+    const e = [];
+    const h = [];
 
-    this.allChars = temp.heroesTeam.members.concat(temp.enemyTeam.members);
+    for (const enemy of temp.enemyTeam.members) {
+      e.push(this.buildCharacterFromRawData(enemy));
+    }
+    for (const hero of temp.heroesTeam.members) {
+      h.push(this.buildCharacterFromRawData(hero));
+    }
+    this.gamePlay.drawUi(this.theme.getCurrentTheme());
+    this.heroes = new Team(h, temp.heroesTeam.owner);
+    this.enemies = new Team(e, temp.enemyTeam.owner);
+
+    this.allChars = this.heroes.members.concat(this.enemies.members);
     this.theme.setPointer(temp.theme);
     this.refresh();
+  }
+
+  buildCharacterFromRawData(positionedCharacter) {
+    if (positionedCharacter === null || positionedCharacter === undefined) throw new Error('object is null or undefined');
+    let tempCharacter;
+    switch (positionedCharacter.character.type) {
+      case 'undead':
+        tempCharacter = new Undead(1, 'undead');
+        break;
+      case 'vampire':
+        tempCharacter = new Vampire(1, 'vampire');
+        break;
+      case 'daemon':
+        tempCharacter = new Daemon(1, 'daemon');
+        break;
+      case 'swordsman':
+        tempCharacter = new Swordsman(1, 'swordsman');
+        break;
+      case 'bowman':
+        tempCharacter = new Bowman(1, 'bowman');
+        break;
+      case 'magician':
+        tempCharacter = new Magician(1, 'magician');
+        break;
+      default:
+        throw new Error(`cant manage this. Unsupported type: ${positionedCharacter.type}`);
+    }
+
+    tempCharacter.attack = positionedCharacter.character.attack;
+    tempCharacter.defence = positionedCharacter.character.defence;
+    tempCharacter.attackDistance = positionedCharacter.character.attackDistance;
+    tempCharacter.level = positionedCharacter.character.level;
+    tempCharacter.maxHealth = positionedCharacter.character.maxHealth;
+    tempCharacter.currentHealth = positionedCharacter.character.currentHealth;
+
+    return new PositionedCharacter(tempCharacter, positionedCharacter.position);
   }
 }
