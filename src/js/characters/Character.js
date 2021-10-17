@@ -1,7 +1,8 @@
 import VictoryConditionsChecker from '../service/VictoryConditionsChecker';
+import characterType from '../enums/characterTypes';
 
 export default class Character {
-  constructor(level, type = 'generic') {
+  constructor(level, type = characterType.generic) {
     if (new.target === Character) {
       throw new Error('Cant create instance of Character class. Character class is abstract!');
     }

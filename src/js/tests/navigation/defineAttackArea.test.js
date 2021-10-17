@@ -1,6 +1,6 @@
 import PositionedCharacter from '../../characters/PositionedCharacter';
 import Bowman from '../../characters/entity/Bowman';
-import actions from '../../actions';
+import actions from '../../enums/actions';
 import Swordsman from '../../characters/entity/Swordsman';
 import Magician from '../../characters/entity/Magician';
 import FieldNavigation from '../../service/FieldNavigation';

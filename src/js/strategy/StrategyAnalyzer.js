@@ -1,5 +1,6 @@
 import AttackStrategy from './AttackStrategy';
 import DefenceStrategy from './DefenceStrategy';
+import characterType from '../enums/characterTypes';
 
 export default class StrategyAnalyzer {
   constructor(gamePlay, gameController) {
@@ -29,10 +30,10 @@ export default class StrategyAnalyzer {
 
   findShooters() {
     const npcShooters = this.gameController.enemies.members
-      .filter((item) => item.character.type === 'vampire' || item.character.type === 'daemon')
+      .filter((item) => item.character.type === characterType.vampire || item.character.type === characterType.daemon)
       .length;
     const playerShooters = this.gameController.heroes.members
-      .filter((item) => item.character.type === 'magician' || item.character.type === 'bowman')
+      .filter((item) => item.character.type === characterType.bowman || item.character.type === characterType.magician)
       .length;
 
     if (npcShooters > playerShooters) return 1;

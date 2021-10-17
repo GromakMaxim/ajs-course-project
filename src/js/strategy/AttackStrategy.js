@@ -1,5 +1,5 @@
 // units are trying to get closer and engage in close combat
-import actions from '../actions';
+import actions from '../enums/actions';
 import FieldNavigation from '../service/FieldNavigation';
 
 export default class AttackStrategy {

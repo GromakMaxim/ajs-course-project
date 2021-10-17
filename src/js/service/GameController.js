@@ -5,8 +5,8 @@ import Bowman from '../characters/entity/Bowman';
 import Vampire from '../characters/entity/Vampire';
 import Undead from '../characters/entity/Undead';
 import Daemon from '../characters/entity/Daemon';
-import cursors from '../cursors';
-import actions from '../actions';
+import cursors from '../enums/cursors';
+import actions from '../enums/actions';
 import FieldNavigation from './FieldNavigation';
 import GameState from './GameState';
 import StrategyAnalyzer from '../strategy/StrategyAnalyzer';
@@ -16,6 +16,7 @@ import GameStateService from './GameStateService';
 import Team from '../characters/Team';
 import Magician from '../characters/entity/Magician';
 import PositionedCharacter from '../characters/PositionedCharacter';
+import characterType from '../enums/characterTypes';
 
 export default class GameController {
   constructor(gamePlay, stateService) {
@@ -200,23 +201,23 @@ export default class GameController {
     if (positionedCharacter === null || positionedCharacter === undefined) throw new Error('object is null or undefined');
     let tempCharacter;
     switch (positionedCharacter.character.type) {
-      case 'undead':
-        tempCharacter = new Undead(1, 'undead');
+      case characterType.undead:
+        tempCharacter = new Undead(1, characterType.undead);
         break;
-      case 'vampire':
-        tempCharacter = new Vampire(1, 'vampire');
+      case characterType.vampire:
+        tempCharacter = new Vampire(1, characterType.vampire);
         break;
-      case 'daemon':
-        tempCharacter = new Daemon(1, 'daemon');
+      case characterType.daemon:
+        tempCharacter = new Daemon(1, characterType.daemon);
         break;
-      case 'swordsman':
-        tempCharacter = new Swordsman(1, 'swordsman');
+      case characterType.swordsman:
+        tempCharacter = new Swordsman(1, characterType.swordsman);
         break;
-      case 'bowman':
-        tempCharacter = new Bowman(1, 'bowman');
+      case characterType.bowman:
+        tempCharacter = new Bowman(1, characterType.bowman);
         break;
-      case 'magician':
-        tempCharacter = new Magician(1, 'magician');
+      case characterType.magician:
+        tempCharacter = new Magician(1, characterType.magician);
         break;
       default:
         throw new Error(`cant manage this. Unsupported type: ${positionedCharacter.type}`);
