@@ -1,4 +1,3 @@
-import VictoryConditionsChecker from '../service/VictoryConditionsChecker';
 import characterType from '../enums/characterTypes';
 
 export default class Character {
@@ -74,23 +73,32 @@ export default class Character {
     const damage = Math.max(this.attack - positionedTarget.character.defence, this.attack * 0.1);
     positionedTarget.character.currentHealth -= damage;
 
-    gamePlay.showDamage(positionedTarget.position, damage)
+    gamePlay.showDamage(positionedTarget.position, damage.toFixed(0))
       .then(() => {
         console.log(`${this.type} нанёс урон персонажу ${positionedTarget.character.type}: ${damage}`);
         if (positionedTarget.character.currentHealth <= 0) {
-          if (gameController.heroes.members.includes(positionedTarget)) {
-            gameController.heroes.deleteMemberByPosition(positionedTarget.position);
-          } else if (gameController.enemies.members.includes(positionedTarget)) {
-            gameController.enemies.deleteMemberByPosition(positionedTarget.position);
+          switch (positionedTarget.character.type) {
+            case characterType.magician:
+            case characterType.bowman:
+            case characterType.swordsman:
+              gameController.heroes.deleteMemberByPosition(positionedTarget.position);
+              break;
+
+            case characterType.vampire:
+            case characterType.daemon:
+            case characterType.undead:
+              gameController.enemies.deleteMemberByPosition(positionedTarget.position);
+              break;
+            default:
+              throw new Error(`unsupported character${positionedTarget.character}`);
           }
-          gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
-          new VictoryConditionsChecker().checkWinningCondition();
           if (positionedTarget.position === gamePlay.selectedCharacter.position) {
             gamePlay.deselectCell(gamePlay.selectedCharacter.position);
             gameController.deselectAll();
             gamePlay.selectedCharacter = null;
           }
         }
+        gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
         gameController.refresh();
         gameController.VCChecker.checkWinningCondition();
       });

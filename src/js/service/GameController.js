@@ -38,6 +38,7 @@ export default class GameController {
     if (parameter !== null && parameter !== undefined) {
       this.nextStage(parameter);
     } else {
+      this.isBlocked = false;
       this.heroes = generateTeam([Swordsman, Bowman], 1, 2, this.gamePlay.boardSize ** 2, 'player');
       this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
       this.allChars = this.heroes.members.concat(this.enemies.members);
