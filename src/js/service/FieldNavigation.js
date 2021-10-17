@@ -266,4 +266,13 @@ export default class FieldNavigation {
     arr.sort((i1, i2) => i1 - i2);
     return arr;
   }
+
+  findDistanceBetween(pos1, pos2) {
+    const coord1 = this.getCoordinates(pos1);
+    const coord2 = this.getCoordinates(pos2);
+
+    const diffRow = Math.abs(coord1[0] - coord2[0]);
+    const diffCol = Math.abs(coord1[1] - coord2[1]);
+    return diffRow + diffCol;
+  }
 }

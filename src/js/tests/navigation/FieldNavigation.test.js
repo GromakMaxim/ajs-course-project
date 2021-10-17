@@ -134,3 +134,51 @@ test('expect [0,0] (err in coords, not able to set pointer)', () => {
   expect([battlefield.row, battlefield.column])
     .toEqual([0, 0]);
 });
+
+test('expect correct distance', () => {
+  const battlefield = new FieldNavigation(64);
+  let actual;
+  // zero
+  for (let i = 0; i < 8; i++) {
+    actual = battlefield.findDistanceBetween(i, i);
+    expect(actual)
+      .toEqual(0);
+  }
+
+  // 1row
+  for (let i = 0; i < 8; i++) {
+    actual = battlefield.findDistanceBetween(0, i);
+    expect(actual)
+      .toEqual(i);
+  }
+
+  // 1 column
+  for (let i = 0; i < 8; i++) {
+    actual = battlefield.findDistanceBetween(i, 0);
+    expect(actual)
+      .toEqual(i);
+  }
+
+  expect(battlefield.findDistanceBetween(18, 45))
+    .toStrictEqual(6);
+
+  expect(battlefield.findDistanceBetween(45, 18))
+    .toStrictEqual(6);
+
+  expect(battlefield.findDistanceBetween(56, 5))
+    .toStrictEqual(12);
+  expect(battlefield.findDistanceBetween(5, 56))
+    .toStrictEqual(12);
+
+  expect(battlefield.findDistanceBetween(32, 39))
+    .toStrictEqual(7);
+
+  expect(battlefield.findDistanceBetween(39, 32))
+    .toStrictEqual(7);
+
+  expect(battlefield.findDistanceBetween(4, 60))
+    .toStrictEqual(7);
+
+  expect(battlefield.findDistanceBetween(60, 4))
+    .toStrictEqual(7);
+});

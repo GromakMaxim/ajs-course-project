@@ -1,6 +1,7 @@
 // units are trying to get closer and engage in close combat
 import actions from '../enums/actions';
 import FieldNavigation from '../service/FieldNavigation';
+import characterType from '../enums/characterTypes';
 
 export default class AttackStrategy {
   constructor(gamePlay, gameController) {
@@ -23,5 +24,22 @@ export default class AttackStrategy {
       }
     }
     console.log('Ход игрока...');
+  }
+
+  findClosesShooter(unit) {
+    const shooters = this.gameController.heroes.members
+      .filter((member) => member.character.type === characterType.magician
+        || member.character.type === characterType.bowman);
+
+    let closest;
+    let minDist = 99999999999;
+    for (const sh of shooters) {
+      const distance = this.navigation.findDistanceBetween(sh.position, unit.position);
+      if (distance < minDist) {
+        minDist = distance;
+        closest = sh;
+      }
+    }
+    return closest;
   }
 }
