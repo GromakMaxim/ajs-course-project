@@ -23,7 +23,7 @@ export default class VictoryConditionsChecker {
           this.gameController.isBlocked = true;
         } else {
           const parameter = this.gameController.theme.pointer + 1;
-          this.gameController.init(parameter);
+          this.gameController.nextStage(parameter);
         }
         resolve(true);
       }

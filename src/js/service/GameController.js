@@ -32,23 +32,18 @@ export default class GameController {
     this.score = 0;
   }
 
-  init(parameter) {
+  init() {
     this.gamePlay.drawUi(this.theme.getCurrentTheme());
-
-    if (parameter !== null && parameter !== undefined) {
-      this.nextStage(parameter);
-    } else {
-      this.isBlocked = false;
-      this.heroes = generateTeam([Swordsman, Bowman], 1, 2, this.gamePlay.boardSize ** 2, 'player');
-      this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
-      this.allChars = this.heroes.members.concat(this.enemies.members);
-    }
+    this.isBlocked = false;
+    this.heroes = generateTeam([Swordsman, Bowman], 1, 2, this.gamePlay.boardSize ** 2, 'player');
+    this.enemies = generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
+    this.allChars = this.heroes.members.concat(this.enemies.members);
 
     this.refresh();
     this.gamePlay.addCellLeaveListener((index) => this.onCellLeave(index));
     this.gamePlay.addCellEnterListener((index) => this.onCellEnter(index));
     this.gamePlay.addCellClickListener((index) => this.onCellClick(index));
-    this.gamePlay.addNewGameListener(() => this.init());
+    this.gamePlay.addNewGameListener(() => this.newGame());
     this.gamePlay.addSaveGameListener(() => this.saveGame());
     this.gamePlay.addLoadGameListener(() => this.loadGame());
     this.VCChecker.setGameController(this);
@@ -68,6 +63,8 @@ export default class GameController {
     this.enemies = generateTeam([Undead, Daemon, Vampire], 1, this.heroes.members.length, this.gamePlay.boardSize ** 2, 'enemy');
     this.enemies.randomizedLvlUp(1, parameter);
     this.allChars = this.heroes.members.concat(this.enemies.members);
+    this.gamePlay.drawUi(this.theme.getCurrentTheme());
+    this.refresh();
   }
 
   async onCellClick(index) {
@@ -173,12 +170,23 @@ export default class GameController {
     }
   }
 
+  async newGame() {
+    this.theme.setPointer(0);
+    this.deselectAll();
+    this.isBlocked = false;
+    this.heroes = await generateTeam([Swordsman, Bowman], 1, 2, this.gamePlay.boardSize ** 2, 'player');
+    this.enemies = await generateTeam([Undead, Daemon, Vampire], 1, 2, this.gamePlay.boardSize ** 2, 'enemy');
+    this.allChars = this.heroes.members.concat(this.enemies.members);
+    this.gamePlay.drawUi(this.theme.getCurrentTheme());
+    this.refresh();
+  }
+
   saveGame() {
     const state = new GameState(this);
     this.stateService.save(state);
   }
 
-  loadGame() {
+  async loadGame() {
     const temp = this.stateService.load();
     const e = [];
     const h = [];
@@ -189,12 +197,13 @@ export default class GameController {
     for (const hero of temp.heroesTeam.members) {
       h.push(this.buildCharacterFromRawData(hero));
     }
-    this.gamePlay.drawUi(this.theme.getCurrentTheme());
+
     this.heroes = new Team(h, temp.heroesTeam.owner);
     this.enemies = new Team(e, temp.enemyTeam.owner);
 
     this.allChars = this.heroes.members.concat(this.enemies.members);
     this.theme.setPointer(temp.theme);
+    await this.gamePlay.drawUi(this.theme.getCurrentTheme());
     this.refresh();
   }
 
