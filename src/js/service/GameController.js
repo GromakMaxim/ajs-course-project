@@ -102,8 +102,10 @@ export default class GameController {
         if (attackArea.includes(index) && enemiesPositions.includes(index)) {
           const attacker = this.gamePlay.selectedCharacter.character;
           const target = this.enemies.findMemberByPosition(index);
-          attacker.makeDamage(target, this.gamePlay, this);
-          this.turn('enemy');
+          attacker.makeDamage(target, this.gamePlay, this)
+            .then(() => {
+              this.turn('enemy');
+            });
         }
       }
     }

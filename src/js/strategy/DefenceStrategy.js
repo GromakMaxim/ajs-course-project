@@ -8,8 +8,10 @@ export default class DefenceStrategy extends Strategy {
         if (resolve !== null) {
           const target = resolve[1];
           const attacker = resolve[0];
-          attacker.character.makeDamage(target, this.gamePlay, this.gameController);
-          console.log('Ход игрока...');
+          attacker.character.makeDamage(target, this.gamePlay, this.gameController)
+            .then(() => {
+              console.log('Ход игрока...');
+            });
         } else {
           console.log('Компьютер ждёт подходящего момента...');
         }
