@@ -1,4 +1,8 @@
 import FieldNavigation from '../../service/FieldNavigation';
+import PositionedCharacter from '../../characters/PositionedCharacter';
+import Swordsman from '../../characters/entity/Swordsman';
+import characterType from '../../enums/characterTypes';
+import Vampire from '../../characters/entity/Vampire';
 
 test('expect 0', () => {
   const battlefield = new FieldNavigation(64);
@@ -181,4 +185,54 @@ test('expect correct distance', () => {
 
   expect(battlefield.findDistanceBetween(60, 4))
     .toStrictEqual(7);
+});
+
+test('expect closest position =36(diagonal)', () => {
+  const battlefield = new FieldNavigation(64);
+  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
+  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
+  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const expected = 36;
+  expect(actual)
+    .toStrictEqual(expected);
+});
+
+test('expect closest position =39(vertical)', () => {
+  const battlefield = new FieldNavigation(64);
+  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 7);
+  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
+  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const expected = 39;
+  expect(actual)
+    .toStrictEqual(expected);
+});
+
+test('expect closest position =60(horizontal)', () => {
+  const battlefield = new FieldNavigation(64);
+  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 56);
+  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
+  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const expected = 60;
+  expect(actual)
+    .toStrictEqual(expected);
+});
+
+test('expect closest position =62(intersect)', () => {
+  const battlefield = new FieldNavigation(64);
+  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 59);
+  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
+  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const expected = 62;
+  expect(actual)
+    .toStrictEqual(expected);
+});
+
+test('expect closest position =27(intersect)', () => {
+  const battlefield = new FieldNavigation(64);
+  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 27);
+  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 28);
+  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const expected = 27;
+  expect(actual)
+    .toStrictEqual(expected);
 });

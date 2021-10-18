@@ -1,4 +1,5 @@
 import Character from './Character';
+import characterType from '../enums/characterTypes';
 // wrapper for the character class
 export default class PositionedCharacter {
   constructor(character, position) {
@@ -12,5 +13,26 @@ export default class PositionedCharacter {
 
     this.character = character;
     this.position = position;
+  }
+
+  moveToTarget(target, gameController) {
+    this.position = gameController.navigation.findNearestPositionToTarget(this, target);
+  }
+
+  findClosesShooter(gameController) {
+    const shooters = gameController.heroes.members
+      .filter((member) => member.character.type === characterType.magician
+        || member.character.type === characterType.bowman);
+
+    let closest = null;
+    let minDist = 99999999999;
+    for (const sh of shooters) {
+      const distance = gameController.navigation.findDistanceBetween(sh.position, this.position);
+      if (distance < minDist) {
+        minDist = distance;
+        closest = sh;
+      }
+    }
+    return closest;
   }
 }

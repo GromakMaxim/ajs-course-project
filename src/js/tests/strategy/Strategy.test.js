@@ -1,14 +1,14 @@
-import PositionedCharacter from '../characters/PositionedCharacter';
-import Swordsman from '../characters/entity/Swordsman';
-import Team from '../characters/Team';
-import GameController from '../service/GameController';
-import DefenceStrategy from '../strategy/DefenceStrategy';
-import Bowman from '../characters/entity/Bowman';
-import characterType from '../enums/characterTypes';
-import GamePlay from '../service/GamePlay';
-import Vampire from '../characters/entity/Vampire';
-import Undead from '../characters/entity/Undead';
-import Magician from '../characters/entity/Magician';
+import PositionedCharacter from '../../characters/PositionedCharacter';
+import Swordsman from '../../characters/entity/Swordsman';
+import Team from '../../characters/Team';
+import GameController from '../../service/GameController';
+import DefenceStrategy from '../../strategy/DefenceStrategy';
+import Bowman from '../../characters/entity/Bowman';
+import characterType from '../../enums/characterTypes';
+import GamePlay from '../../service/GamePlay';
+import Vampire from '../../characters/entity/Vampire';
+import Undead from '../../characters/entity/Undead';
+import Magician from '../../characters/entity/Magician';
 
 test('expect bowman', () => {
   const p1 = new PositionedCharacter(new Bowman(1, characterType.bowman), 0);

@@ -1,15 +1,8 @@
 // units are trying to get closer and engage in close combat
 import actions from '../enums/actions';
-import FieldNavigation from '../service/FieldNavigation';
-import characterType from '../enums/characterTypes';
+import Strategy from './Strategy';
 
-export default class AttackStrategy {
-  constructor(gamePlay, gameController) {
-    this.gamePlay = gamePlay;
-    this.gameController = gameController;
-    this.navigation = new FieldNavigation(this.gamePlay.boardSize ** 2);
-  }
-
+export default class AttackStrategy extends Strategy {
   // if smb in range - attack him
   process() {
     console.log('Attack selected');
@@ -24,22 +17,5 @@ export default class AttackStrategy {
       }
     }
     console.log('Ход игрока...');
-  }
-
-  findClosesShooter(unit) {
-    const shooters = this.gameController.heroes.members
-      .filter((member) => member.character.type === characterType.magician
-        || member.character.type === characterType.bowman);
-
-    let closest;
-    let minDist = 99999999999;
-    for (const sh of shooters) {
-      const distance = this.navigation.findDistanceBetween(sh.position, unit.position);
-      if (distance < minDist) {
-        minDist = distance;
-        closest = sh;
-      }
-    }
-    return closest;
   }
 }

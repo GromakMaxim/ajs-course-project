@@ -275,4 +275,21 @@ export default class FieldNavigation {
     const diffCol = Math.abs(coord1[1] - coord2[1]);
     return diffRow + diffCol;
   }
+
+  findNearestPositionToTarget(attacker, target) {
+    if (Math.abs(attacker.position - target.position) === 1) return attacker.position;
+    const movementArea = this.defineActionArea(attacker, this.size, 'move');
+    let distance = 99999;
+    let result;
+    for (const pos of movementArea) {
+      if (pos !== target.position) {
+        const currentDistanceBetween = this.findDistanceBetween(pos, target.position);
+        if (currentDistanceBetween < distance) {
+          distance = currentDistanceBetween;
+          result = pos;
+        }
+      }
+    }
+    return result;
+  }
 }
