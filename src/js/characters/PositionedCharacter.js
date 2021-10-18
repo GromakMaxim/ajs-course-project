@@ -16,7 +16,7 @@ export default class PositionedCharacter {
   }
 
   moveToTarget(target, gameController) {
-    this.position = gameController.navigation.findNearestPositionToTarget(this, target);
+    this.position = gameController.navigation.findNearestPositionToTarget(this, target, gameController);
   }
 
   findClosestShooter(gameController) {
@@ -40,7 +40,7 @@ export default class PositionedCharacter {
     let closest = null;
     let minDist = 99999999999;
     for (const currentEnemy of gameController.heroes.members) {
-      const distance = gameController.navigation.findDistanceBetween(currentEnemy.position, this.position);
+      const distance = gameController.navigation.findDistanceBetween(currentEnemy.position, this.position, gameController);
       if (distance < minDist) {
         minDist = distance;
         closest = currentEnemy;

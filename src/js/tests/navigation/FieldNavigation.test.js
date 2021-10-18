@@ -3,6 +3,10 @@ import PositionedCharacter from '../../characters/PositionedCharacter';
 import Swordsman from '../../characters/entity/Swordsman';
 import characterType from '../../enums/characterTypes';
 import Vampire from '../../characters/entity/Vampire';
+import GameController from '../../service/GameController';
+import GamePlay from '../../service/GamePlay';
+import Team from '../../characters/Team';
+import Undead from '../../characters/entity/Undead';
 
 test('expect 0', () => {
   const battlefield = new FieldNavigation(64);
@@ -188,40 +192,64 @@ test('expect correct distance', () => {
 });
 
 test('expect closest position =36(diagonal)', () => {
-  const battlefield = new FieldNavigation(64);
-  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
-  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
-  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
+  const teamH = new Team([p1], 'player');
+
+  const e1 = new PositionedCharacter(new Undead(1, characterType.undead), 63);
+  const teamE = new Team([e1], 'enemy');
+  const gc = new GameController(new GamePlay(), null);
+  gc.heroes = teamH;
+  gc.enemies = teamE;
+  gc.allChars = gc.heroes.members.concat(gc.enemies.members);
+  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 36;
   expect(actual)
     .toStrictEqual(expected);
 });
 
 test('expect closest position =39(vertical)', () => {
-  const battlefield = new FieldNavigation(64);
-  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 7);
-  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
-  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 7);
+  const teamH = new Team([p1], 'player');
+
+  const e1 = new PositionedCharacter(new Undead(1, characterType.undead), 63);
+  const teamE = new Team([e1], 'enemy');
+  const gc = new GameController(new GamePlay(), null);
+  gc.heroes = teamH;
+  gc.enemies = teamE;
+  gc.allChars = gc.heroes.members.concat(gc.enemies.members);
+  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 39;
   expect(actual)
     .toStrictEqual(expected);
 });
 
 test('expect closest position =60(horizontal)', () => {
-  const battlefield = new FieldNavigation(64);
-  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 56);
-  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
-  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 56);
+  const teamH = new Team([p1], 'player');
+
+  const e1 = new PositionedCharacter(new Undead(1, characterType.undead), 63);
+  const teamE = new Team([e1], 'enemy');
+  const gc = new GameController(new GamePlay(), null);
+  gc.heroes = teamH;
+  gc.enemies = teamE;
+  gc.allChars = gc.heroes.members.concat(gc.enemies.members);
+  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 60;
   expect(actual)
     .toStrictEqual(expected);
 });
 
 test('expect closest position =62(intersect)', () => {
-  const battlefield = new FieldNavigation(64);
-  const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 59);
-  const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
-  const actual = battlefield.findNearestPositionToTarget(attacker, target);
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 59);
+  const teamH = new Team([p1], 'player');
+
+  const e1 = new PositionedCharacter(new Undead(1, characterType.undead), 63);
+  const teamE = new Team([e1], 'enemy');
+  const gc = new GameController(new GamePlay(), null);
+  gc.heroes = teamH;
+  gc.enemies = teamE;
+  gc.allChars = gc.heroes.members.concat(gc.enemies.members);
+  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 62;
   expect(actual)
     .toStrictEqual(expected);
@@ -233,6 +261,23 @@ test('expect closest position =27(intersect)', () => {
   const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 28);
   const actual = battlefield.findNearestPositionToTarget(attacker, target);
   const expected = 27;
+  expect(actual)
+    .toStrictEqual(expected);
+});
+
+test('expect closest position =59', () => {
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 63);
+  const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 60);
+  const teamH = new Team([p1, p2], 'player');
+
+  const e1 = new PositionedCharacter(new Undead(1, characterType.undead), 56);
+  const teamE = new Team([e1], 'enemy');
+  const gc = new GameController(new GamePlay(), null);
+  gc.heroes = teamH;
+  gc.enemies = teamE;
+  gc.allChars = gc.heroes.members.concat(gc.enemies.members);
+  const actual = gc.navigation.findNearestPositionToTarget(e1, p1, gc);
+  const expected = 59;
   expect(actual)
     .toStrictEqual(expected);
 });

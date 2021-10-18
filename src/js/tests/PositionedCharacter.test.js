@@ -152,3 +152,47 @@ test('expect null (no shooters in team)', () => {
   expect(actual)
     .toStrictEqual(null);
 });
+
+test('expect char no1', () => {
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
+  const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 2);
+  const p3 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 4);
+  const p4 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 6);
+
+  const heroesTeam = new Team([p1, p2, p3, p4], 'player');
+
+  const e1 = new PositionedCharacter(new Vampire(1, characterType.vampire), 56);
+
+  const enemiesTeam = new Team([e1], 'enemy');
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gp.boardSize = 64;
+  gc.heroes = heroesTeam;
+  gc.enemies = enemiesTeam;
+
+  const actual = e1.findClosestEnemy(gc);
+  expect(actual)
+    .toStrictEqual(p1);
+});
+
+test('expect char no4', () => {
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
+  const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 2);
+  const p3 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 4);
+  const p4 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 6);
+
+  const heroesTeam = new Team([p1, p2, p3, p4], 'player');
+
+  const e1 = new PositionedCharacter(new Vampire(1, characterType.vampire), 63);
+
+  const enemiesTeam = new Team([e1], 'enemy');
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gp.boardSize = 64;
+  gc.heroes = heroesTeam;
+  gc.enemies = enemiesTeam;
+
+  const actual = e1.findClosestEnemy(gc);
+  expect(actual)
+    .toStrictEqual(p4);
+});
