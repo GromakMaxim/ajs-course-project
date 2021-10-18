@@ -19,7 +19,7 @@ export default class PositionedCharacter {
     this.position = gameController.navigation.findNearestPositionToTarget(this, target);
   }
 
-  findClosesShooter(gameController) {
+  findClosestShooter(gameController) {
     const shooters = gameController.heroes.members
       .filter((member) => member.character.type === characterType.magician
         || member.character.type === characterType.bowman);
@@ -31,6 +31,19 @@ export default class PositionedCharacter {
       if (distance < minDist) {
         minDist = distance;
         closest = sh;
+      }
+    }
+    return closest;
+  }
+
+  findClosestEnemy(gameController) {
+    let closest = null;
+    let minDist = 99999999999;
+    for (const currentEnemy of gameController.heroes.members) {
+      const distance = gameController.navigation.findDistanceBetween(currentEnemy.position, this.position);
+      if (distance < minDist) {
+        minDist = distance;
+        closest = currentEnemy;
       }
     }
     return closest;

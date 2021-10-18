@@ -43,7 +43,6 @@ export default class Strategy {
       const resultArr = []; // attacker - target
       const heroPositions = this.gameController.heroes.getPositions();
       const attackers = this.findUnitsCapableToAttack();
-
       let mostDangerousAttacker;
       let maxDamage = 0;
       let weakestTarget;
@@ -59,9 +58,12 @@ export default class Strategy {
         }
       }
 
-      resultArr.push(mostDangerousAttacker);
-      resultArr.push(weakestTarget);
-      resolve(resultArr);
+      if (mostDangerousAttacker !== null && mostDangerousAttacker !== undefined) {
+        resultArr.push(mostDangerousAttacker);
+        resultArr.push(weakestTarget);
+        resolve(resultArr);
+      }
+      resolve(null);
     }));
   }
 }

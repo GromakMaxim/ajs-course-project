@@ -72,7 +72,7 @@ test('expect closest magician', () => {
   gc.heroes = heroesTeam;
   gc.enemies = enemiesTeam;
 
-  const actual = e1.findClosesShooter(gc);
+  const actual = e1.findClosestShooter(gc);
   expect(actual)
     .toStrictEqual(p3);
 });
@@ -92,7 +92,7 @@ test('expect closest bow', () => {
   gc.heroes = heroesTeam;
   gc.enemies = enemiesTeam;
 
-  const actual = e1.findClosesShooter(gc);
+  const actual = e1.findClosestShooter(gc);
   expect(actual)
     .toStrictEqual(p2);
 });
@@ -110,7 +110,7 @@ test('expect closest bowman (corner case)', () => {
   gp.boardSize = 64;
   gc.heroes = heroesTeam;
   gc.enemies = enemiesTeam;
-  const actual = e1.findClosesShooter(gc);
+  const actual = e1.findClosestShooter(gc);
   expect(actual)
     .toStrictEqual(p1);
 });
@@ -129,7 +129,26 @@ test('expect null (no shooters in team)', () => {
   gc.heroes = heroesTeam;
   gc.enemies = enemiesTeam;
 
-  const actual = e1.findClosesShooter(gc);
+  const actual = e1.findClosestShooter(gc);
+  expect(actual)
+    .toStrictEqual(null);
+});
+
+test('expect null (no shooters in team)', () => {
+  const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
+  const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 63);
+  const heroesTeam = new Team([p1, p2], 'player');
+
+  const e1 = new PositionedCharacter(new Vampire(1, characterType.vampire), 56);
+
+  const enemiesTeam = new Team([e1], 'enemy');
+  const gp = new GamePlay();
+  const gc = new GameController(gp, null);
+  gp.boardSize = 64;
+  gc.heroes = heroesTeam;
+  gc.enemies = enemiesTeam;
+
+  const actual = e1.findClosestShooter(gc);
   expect(actual)
     .toStrictEqual(null);
 });
