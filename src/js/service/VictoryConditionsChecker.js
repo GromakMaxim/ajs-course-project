@@ -14,23 +14,25 @@ export default class VictoryConditionsChecker {
   }
 
   checkWinningCondition() {
-    if (this.gameController.enemies.members.length === 0) {
-      console.log('Player has won!');
-      this.gameController.score += this.gameController.calculateScore();
-      const isChanged = this.gameController.theme.next();
-      if (!isChanged) {
-        this.gameController.isBlocked = true;
-      } else {
-        const parameter = this.gameController.theme.pointer + 1;
-        this.gameController.init(parameter);
+    return new Promise(((resolve) => {
+      if (this.gameController.enemies.members.length === 0) {
+        console.log('Player has won!');
+        this.gameController.score += this.gameController.calculateScore();
+        const isChanged = this.gameController.theme.next();
+        if (!isChanged) {
+          this.gameController.isBlocked = true;
+        } else {
+          const parameter = this.gameController.theme.pointer + 1;
+          this.gameController.init(parameter);
+        }
+        resolve(true);
       }
-      return true;
-    }
-    if (this.gameController.heroes.members.length === 0) {
-      console.log('Computer has won!');
-      this.gameController.isBlocked = true;
-      return true;
-    }
-    return false;
+      if (this.gameController.heroes.members.length === 0) {
+        console.log('Computer has won!');
+        this.gameController.isBlocked = true;
+        resolve(true);
+      }
+      resolve(false);
+    }));
   }
 }

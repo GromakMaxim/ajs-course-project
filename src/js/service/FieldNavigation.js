@@ -1,5 +1,7 @@
 // quite simple navigation by tiles
 
+import actions from '../enums/actions';
+
 export default class FieldNavigation {
   constructor(size) {
     this.size = size;
@@ -125,146 +127,148 @@ export default class FieldNavigation {
   }
 
   defineActionArea(positionedCharacter, boardSize, action) {
-    const arr = [];
+    return new Promise((resolve) => {
+      const arr = [];
 
-    const currentPosition = positionedCharacter.position;
-    if (currentPosition > boardSize - 1 || currentPosition < 0) throw new Error(`wrong position parameter: ${positionedCharacter}`);
-    const coords = this.getCoordinates(currentPosition);
-    const isSet = this.setPointerByArrayArgs(coords);
-    if (!isSet) throw new Error(`cant define such coordinates in character ${positionedCharacter}`);
-    let distance = 0;
+      const currentPosition = positionedCharacter.position;
+      if (currentPosition > boardSize - 1 || currentPosition < 0) throw new Error(`wrong position parameter: ${positionedCharacter}`);
+      const coords = this.getCoordinates(currentPosition);
+      const isSet = this.setPointerByArrayArgs(coords);
+      if (!isSet) throw new Error(`cant define such coordinates in character ${positionedCharacter}`);
+      let distance = 0;
 
-    if (action === 'move') {
-      distance = positionedCharacter.character.movementDistance;
+      if (action === actions.move) {
+        distance = positionedCharacter.character.movementDistance;
 
-      // diagonal up-left
-      let step = 1;
-      while (step <= distance) {
-        const b = this.goUpLeft();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal up-right
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goUpRight();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal down-left
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goDownLeft();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal down-right
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goDownRight();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal left
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goLeft();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal right
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goRight();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal up
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goUp();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-
-      // diagonal down
-      this.setPointerByArrayArgs(coords);
-      step = 1;
-      while (step <= distance) {
-        const b = this.goDown();
-        if (!b) break;
-        arr.push(this.getValue());
-        step++;
-      }
-    }
-
-    // we climb to the top, then descending we add line by line coordinates within the attack range
-    if (action === 'attack') {
-      distance = positionedCharacter.character.attackDistance;
-      let rows = distance * 2 + 1;
-
-      let step = 1;
-      let startPos;
-      let isExist;
-      while (step <= distance) {
-        isExist = this.goUp();
-        if (!isExist) break;
-        step++;
-      }
-      if (step === 1) rows = distance + 1;
-
-      let currentRow = 1;
-      while (currentRow <= rows) {
-        startPos = this.getValue();
-        arr.push(startPos);
-        // left
-        let currentCol = 1;
-        while (currentCol <= distance) {
-          isExist = this.goLeft();
-          if (!isExist) break;
+        // diagonal up-left
+        let step = 1;
+        while (step <= distance) {
+          const b = this.goUpLeft();
+          if (!b) break;
           arr.push(this.getValue());
-          currentCol++;
-        }
-        this.setPointerByArrayArgs(this.getCoordinates(startPos));
-
-        // right
-        currentCol = 1;
-        while (currentCol <= distance) {
-          isExist = this.goRight();
-          if (!isExist) break;
-          arr.push(this.getValue());
-          currentCol++;
+          step++;
         }
 
-        this.setPointerByArrayArgs(this.getCoordinates(startPos));
-        isExist = this.goDown();
-        if (!isExist) break;
-        currentRow++;
+        // diagonal up-right
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goUpRight();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal down-left
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goDownLeft();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal down-right
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goDownRight();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal left
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goLeft();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal right
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goRight();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal up
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goUp();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
+
+        // diagonal down
+        this.setPointerByArrayArgs(coords);
+        step = 1;
+        while (step <= distance) {
+          const b = this.goDown();
+          if (!b) break;
+          arr.push(this.getValue());
+          step++;
+        }
       }
 
-      arr.splice(arr.findIndex((item) => item === currentPosition), 1);
-    }
-    arr.sort((i1, i2) => i1 - i2);
-    return arr;
+      // we climb to the top, then descending we add line by line coordinates within the attack range
+      if (action === actions.attack) {
+        distance = positionedCharacter.character.attackDistance;
+        let rows = distance * 2 + 1;
+
+        let step = 1;
+        let startPos;
+        let isExist;
+        while (step <= distance) {
+          isExist = this.goUp();
+          if (!isExist) break;
+          step++;
+        }
+        if (step === 1) rows = distance + 1;
+
+        let currentRow = 1;
+        while (currentRow <= rows) {
+          startPos = this.getValue();
+          arr.push(startPos);
+          // left
+          let currentCol = 1;
+          while (currentCol <= distance) {
+            isExist = this.goLeft();
+            if (!isExist) break;
+            arr.push(this.getValue());
+            currentCol++;
+          }
+          this.setPointerByArrayArgs(this.getCoordinates(startPos));
+
+          // right
+          currentCol = 1;
+          while (currentCol <= distance) {
+            isExist = this.goRight();
+            if (!isExist) break;
+            arr.push(this.getValue());
+            currentCol++;
+          }
+
+          this.setPointerByArrayArgs(this.getCoordinates(startPos));
+          isExist = this.goDown();
+          if (!isExist) break;
+          currentRow++;
+        }
+
+        arr.splice(arr.findIndex((item) => item === currentPosition), 1);
+      }
+      arr.sort((i1, i2) => i1 - i2);
+      resolve(arr);
+    });
   }
 
   findDistanceBetween(pos1, pos2) {
@@ -276,9 +280,9 @@ export default class FieldNavigation {
     return diffRow + diffCol;
   }
 
-  findNearestPositionToTarget(attacker, target, gameController) {
+  async findNearestPositionToTarget(attacker, target, gameController) {
     if (Math.abs(attacker.position - target.position) === 1) return attacker.position;
-    const movementArea = this.defineActionArea(attacker, this.size, 'move');
+    const movementArea = await this.defineActionArea(attacker, this.size, 'move');
     let distance = 99999;
     let result;
     for (const pos of movementArea) {

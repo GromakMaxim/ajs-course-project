@@ -70,7 +70,7 @@ export default class GameController {
     this.allChars = this.heroes.members.concat(this.enemies.members);
   }
 
-  onCellClick(index) {
+  async onCellClick(index) {
     if (!this.isBlocked) {
       const heroesPositions = this.heroes.getPositions();
       const enemiesPositions = this.enemies.getPositions();
@@ -84,12 +84,12 @@ export default class GameController {
       }
 
       if (this.gamePlay.selectedCharacter !== null) {
-        const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
-        const attackArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
+        const movementArea = await this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
+        const attackArea = await this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
 
         // move
         if (movementArea.includes(index) && !enemiesPositions.includes(index)) {
-          const char = this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
+          const char = await this.heroes.findMemberByPosition(this.gamePlay.selectedCharacter.position);
           char.position = index;
           console.log(`Игрок: переход ${char.character.type} на клетку ${index}`);
           this.refresh();
@@ -101,24 +101,22 @@ export default class GameController {
         // attack
         if (attackArea.includes(index) && enemiesPositions.includes(index)) {
           const attacker = this.gamePlay.selectedCharacter.character;
-          const target = this.enemies.findMemberByPosition(index);
-          attacker.makeDamage(target, this.gamePlay, this)
-            .then(() => {
-              this.turn('enemy');
-            });
+          const target = await this.enemies.findMemberByPosition(index);
+          await attacker.makeDamage(target, this.gamePlay, this);
+          this.turn('enemy');
         }
       }
     }
   }
 
-  onCellEnter(index) {
+  async onCellEnter(index) {
     if (!this.isBlocked) {
-      const heroesPositions = this.heroes.getPositions();
-      const enemiesPositions = this.enemies.getPositions();
+      const heroesPositions = await this.heroes.getPositions();
+      const enemiesPositions = await this.enemies.getPositions();
 
       if (this.gamePlay.selectedCharacter !== null && this.gamePlay.selectedCharacter.position !== index) {
-        const movementArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
-        const attackArea = this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
+        const movementArea = await this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.move);
+        const attackArea = await this.navigation.defineActionArea(this.gamePlay.selectedCharacter, this.gamePlay.boardSize ** 2, actions.attack);
 
         if (attackArea.includes(index) && enemiesPositions.includes(index)) {
           this.gamePlay.setCursor(cursors.crosshair);

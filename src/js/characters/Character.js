@@ -69,40 +69,37 @@ export default class Character {
     }
   }
 
-  makeDamage(positionedTarget, gamePlay, gameController) {
-    return new Promise(() => {
-      const damage = Math.max(this.attack - positionedTarget.character.defence, this.attack * 0.1);
-      positionedTarget.character.currentHealth -= damage;
+  async makeDamage(positionedTarget, gamePlay, gameController) {
+    const damage = Math.max(this.attack - positionedTarget.character.defence, this.attack * 0.1);
+    positionedTarget.character.currentHealth -= damage;
 
-      gamePlay.showDamage(positionedTarget.position, damage.toFixed(0))
-        .then(() => {
-          console.log(`${this.type} нанёс урон персонажу ${positionedTarget.character.type}: ${damage}`);
-          if (positionedTarget.character.currentHealth <= 0) {
-            switch (positionedTarget.character.type) {
-              case characterType.magician:
-              case characterType.bowman:
-              case characterType.swordsman:
-                gameController.heroes.deleteMemberByPosition(positionedTarget.position);
-                break;
+    await gamePlay.showDamage(positionedTarget.position, damage.toFixed(0));
 
-              case characterType.vampire:
-              case characterType.daemon:
-              case characterType.undead:
-                gameController.enemies.deleteMemberByPosition(positionedTarget.position);
-                break;
-              default:
-                throw new Error(`unsupported character${positionedTarget.character}`);
-            }
-            if (positionedTarget.position === gamePlay.selectedCharacter.position) {
-              gamePlay.deselectCell(gamePlay.selectedCharacter.position);
-              gameController.deselectAll();
-              gamePlay.selectedCharacter = null;
-            }
-          }
-          gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
-          gameController.refresh();
-          gameController.VCChecker.checkWinningCondition();
-        });
-    });
+    console.log(`${this.type} нанёс урон персонажу ${positionedTarget.character.type}: ${damage}`);
+    if (positionedTarget.character.currentHealth <= 0) {
+      switch (positionedTarget.character.type) {
+        case characterType.magician:
+        case characterType.bowman:
+        case characterType.swordsman:
+          await gameController.heroes.deleteMemberByPosition(positionedTarget.position);
+          break;
+
+        case characterType.vampire:
+        case characterType.daemon:
+        case characterType.undead:
+          await gameController.enemies.deleteMemberByPosition(positionedTarget.position);
+          break;
+        default:
+          throw new Error(`unsupported character${positionedTarget.character}`);
+      }
+      if (positionedTarget.position === gamePlay.selectedCharacter.position) {
+        gamePlay.deselectCell(gamePlay.selectedCharacter.position);
+        gameController.deselectAll();
+        gamePlay.selectedCharacter = null;
+      }
+    }
+    gameController.allChars = gameController.heroes.members.concat(gameController.enemies.members);
+    await gameController.refresh();
+    await gameController.VCChecker.checkWinningCondition();
   }
 }

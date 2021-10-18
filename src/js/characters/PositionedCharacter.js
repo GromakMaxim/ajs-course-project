@@ -15,8 +15,8 @@ export default class PositionedCharacter {
     this.position = position;
   }
 
-  moveToTarget(target, gameController) {
-    this.position = gameController.navigation.findNearestPositionToTarget(this, target, gameController);
+  async moveToTarget(target, gameController) {
+    this.position = await gameController.navigation.findNearestPositionToTarget(this, target, gameController);
   }
 
   findClosestShooter(gameController) {
