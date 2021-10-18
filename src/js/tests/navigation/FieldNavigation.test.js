@@ -191,7 +191,7 @@ test('expect correct distance', () => {
     .toStrictEqual(7);
 });
 
-test('expect closest position =36(diagonal)', () => {
+test('expect closest position =36(diagonal)', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
   const teamH = new Team([p1], 'player');
 
@@ -201,13 +201,13 @@ test('expect closest position =36(diagonal)', () => {
   gc.heroes = teamH;
   gc.enemies = teamE;
   gc.allChars = gc.heroes.members.concat(gc.enemies.members);
-  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 36;
-  expect(actual)
+  await expect(gc.navigation.findNearestPositionToTarget(p1, e1, gc))
+    .resolves
     .toStrictEqual(expected);
 });
 
-test('expect closest position =39(vertical)', () => {
+test('expect closest position =39(vertical)', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 7);
   const teamH = new Team([p1], 'player');
 
@@ -217,13 +217,14 @@ test('expect closest position =39(vertical)', () => {
   gc.heroes = teamH;
   gc.enemies = teamE;
   gc.allChars = gc.heroes.members.concat(gc.enemies.members);
-  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
+
   const expected = 39;
-  expect(actual)
+  await expect(gc.navigation.findNearestPositionToTarget(p1, e1, gc))
+    .resolves
     .toStrictEqual(expected);
 });
 
-test('expect closest position =60(horizontal)', () => {
+test('expect closest position =60(horizontal)', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 56);
   const teamH = new Team([p1], 'player');
 
@@ -233,13 +234,13 @@ test('expect closest position =60(horizontal)', () => {
   gc.heroes = teamH;
   gc.enemies = teamE;
   gc.allChars = gc.heroes.members.concat(gc.enemies.members);
-  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 60;
-  expect(actual)
+  await expect(gc.navigation.findNearestPositionToTarget(p1, e1, gc))
+    .resolves
     .toStrictEqual(expected);
 });
 
-test('expect closest position =62(intersect)', () => {
+test('expect closest position =62(intersect)', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 59);
   const teamH = new Team([p1], 'player');
 
@@ -249,23 +250,23 @@ test('expect closest position =62(intersect)', () => {
   gc.heroes = teamH;
   gc.enemies = teamE;
   gc.allChars = gc.heroes.members.concat(gc.enemies.members);
-  const actual = gc.navigation.findNearestPositionToTarget(p1, e1, gc);
   const expected = 62;
-  expect(actual)
+  await expect(gc.navigation.findNearestPositionToTarget(p1, e1, gc))
+    .resolves
     .toStrictEqual(expected);
 });
 
-test('expect closest position =27(intersect)', () => {
+test('expect closest position =27(intersect)', async () => {
   const battlefield = new FieldNavigation(64);
   const attacker = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 27);
   const target = new PositionedCharacter(new Vampire(1, characterType.vampire), 28);
-  const actual = battlefield.findNearestPositionToTarget(attacker, target);
   const expected = 27;
-  expect(actual)
+  await expect(battlefield.findNearestPositionToTarget(attacker, target))
+    .resolves
     .toStrictEqual(expected);
 });
 
-test('expect closest position =59', () => {
+test('expect closest position =59', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 63);
   const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 60);
   const teamH = new Team([p1, p2], 'player');
@@ -276,8 +277,8 @@ test('expect closest position =59', () => {
   gc.heroes = teamH;
   gc.enemies = teamE;
   gc.allChars = gc.heroes.members.concat(gc.enemies.members);
-  const actual = gc.navigation.findNearestPositionToTarget(e1, p1, gc);
   const expected = 59;
-  expect(actual)
+  await expect(gc.navigation.findNearestPositionToTarget(e1, p1, gc))
+    .resolves
     .toStrictEqual(expected);
 });

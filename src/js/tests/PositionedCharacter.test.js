@@ -37,7 +37,7 @@ test('expect error', () => {
     .toThrow('position must be a number');
 });
 
-test('expect 58', () => {
+test('expect 58', async () => {
   const p1 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 0);
   const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 63);
   const heroesTeam = new Team([p1, p2], 'player');
@@ -51,7 +51,7 @@ test('expect 58', () => {
   gc.heroes = heroesTeam;
   gc.enemies = enemiesTeam;
 
-  e1.moveToTarget(p2, gc);
+  await e1.moveToTarget(p2, gc);
   const actual = e1.position;
   expect(actual)
     .toEqual(58);

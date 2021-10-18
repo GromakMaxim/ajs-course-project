@@ -23,7 +23,7 @@ test('testcase', () => {
     .toStrictEqual(gc);
 });
 
-test('expect false. game is in progress', () => {
+test('expect false. game is in progress', async () => {
   const p1 = new Swordsman(1, 'swordsman');
   const e1 = new Vampire(1, 'vampire');
   const teamHeroes = new Team([p1], 'player', 64);
@@ -35,12 +35,12 @@ test('expect false. game is in progress', () => {
   gc.enemies = teamEnemies;
   vcc.setGameController(gc);
 
-  const actual = vcc.checkWinningCondition();
-  expect(actual)
+  await expect(vcc.checkWinningCondition())
+    .resolves
     .toStrictEqual(false);
 });
 
-test('expect true. computer has won', () => {
+test('expect true. computer has won', async () => {
   const p1 = new Swordsman(1, 'swordsman');
   const e1 = new Vampire(1, 'vampire');
   const teamHeroes = new Team([p1], 'player', 64);
@@ -55,7 +55,7 @@ test('expect true. computer has won', () => {
   gc.enemies = teamEnemies;
   vcc.setGameController(gc);
 
-  const actual = vcc.checkWinningCondition();
-  expect(actual)
+  await expect(vcc.checkWinningCondition())
+    .resolves
     .toStrictEqual(true);
 });

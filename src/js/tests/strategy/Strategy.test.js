@@ -10,7 +10,7 @@ import Vampire from '../../characters/entity/Vampire';
 import Undead from '../../characters/entity/Undead';
 import Magician from '../../characters/entity/Magician';
 
-test('expect bowman', () => {
+test('expect bowman', async () => {
   const p1 = new PositionedCharacter(new Bowman(1, characterType.bowman), 0);
   const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 1);
   const heroesTeam = new Team([p1, p2], 'player');
@@ -21,12 +21,12 @@ test('expect bowman', () => {
 
   const ds = new DefenceStrategy(gp, gc);
 
-  const actual = ds.findWeakestUnit([0, 1]);
-  expect(actual)
+  await expect(ds.findWeakestUnit([0, 1]))
+    .resolves
     .toStrictEqual(p2);
 });
 
-test('expect vampire', () => {
+test('expect vampire', async () => {
   const p1 = new PositionedCharacter(new Bowman(1, characterType.bowman), 0);
   const p2 = new PositionedCharacter(new Swordsman(1, characterType.swordsman), 1);
   const heroesTeam = new Team([p1, p2], 'player');
@@ -42,9 +42,9 @@ test('expect vampire', () => {
 
   const ds = new DefenceStrategy(gp, gc);
 
-  const actual = ds.findUnitsCapableToAttack();
   const expected = [e1];
-  expect(actual)
+  await expect(ds.findUnitsCapableToAttack())
+    .resolves
     .toStrictEqual(expected);
 });
 
